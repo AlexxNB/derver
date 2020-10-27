@@ -13,10 +13,24 @@ export function startWatchers(options){
 }
 
 function watchDir(dirname,callback){
-    fs.watch(dirname, callback);
+
+    fs.watch(dirname, (evt,name) => {
+        const f = path.join(dirname,name);
+        debounce(f,callback)(evt,f)
+    });
 
     fs.readdirSync(dirname).forEach(file => {
         const filepath = path.join(dirname,file);
         if(fs.statSync(filepath).isDirectory()) watchDir(filepath,callback);
     });
+}
+
+const cash = new Set();
+function debounce(key,func){
+    return function(){
+        if(cash.has(key)) return;
+        cash.add(key);
+        setTimeout(_ => cash.delete(key),100);
+        func.apply(null,arguments);
+    } 
 }
