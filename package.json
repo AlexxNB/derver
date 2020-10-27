@@ -1,0 +1,34 @@
+{
+  "name": "tinds",
+  "version": "1.0.0",
+  "description": "Tiny Development Server for serving your web-application",
+  "main": "dist/tinds.cjs.js",
+  "module": "dist/tinds.esm.js",
+  "scripts": {
+    "build": "node esbuild",
+    "prestart": "npm run build",
+    "start": "node dist/tinds.cjs.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexxNB/tinds.git"
+  },
+  "author": "Alexey Schebelev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlexxNB/tinds/issues"
+  },
+  "homepage": "https://github.com/AlexxNB/tinds#readme",
+  "keywords": [
+    "server",
+    "devserver",
+    "livereload",
+    "serve",
+    "http-server",
+    "http"
+  ],
+  "devDependencies": {
+    "esbuild": "^0.7.21"
+  }
+}
