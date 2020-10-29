@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import c from './colors';
+import {livereload} from './livereload';
 
 export function startWatchers(options){
     if(options.watch === null) {
@@ -15,6 +16,7 @@ export function startWatchers(options){
         Object.entries(options.watch).forEach(w=>{
             watchDir(w[0], function(evt, name) {
                 console.log(evt, name,w[1]);
+                if(w[1]=='reload') livereload('reload');
             });
             console.log('  '+c.yellow('- '+w[0]));
         });

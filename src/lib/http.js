@@ -3,23 +3,38 @@ import fs from 'fs';
 import path from 'path';
 import mime from './mime.json';
 import c from './colors';
-import {lrClient,lrServer} from './livereload';
+import {lrClient,lrMiddleware,getLrURL} from './livereload';
 
 export function startHTTPServer(options){
 
+    const livereload = lrMiddleware(options);
     const file = mwFile(options);
     const static = mwStatic(options);
 
     http.createServer(function (req, res) {
-        file(req,res);
-        static(req,res);
+        runMiddlewares([
+            livereload,
+            file,
+            static
+        ],req,res);
     }).listen(options.port,options.host,_ => {
         console.log(`Started server on ${c.blue(`http://${options.host}:${options.port}`)}`);
     });
 }
 
+function runMiddlewares(mwArray,req,res){
+    let mayContinue = false;
+    const next = ()=>mayContinue=true;
+
+    for(let mw of mwArray){
+        mayContinue = false;
+        mw(req,res,next);
+        if(!mayContinue) break;
+    }
+}
+
 function mwFile(options){
-    return function(req,res){
+    return function(req,res, next){
         let file = path.join(options.dir,req.url);
         let ext = path.extname(file);
 
@@ -30,6 +45,8 @@ function mwFile(options){
 
         req.file = file;
         req.extname = ext;
+
+        next();
     }
 }
 
@@ -58,7 +75,7 @@ function injectLivereload(body){
             .toString('utf-8')
             .replace(
                 /(<\/body>)/,
-                `<script>${lrClient()}</script>\n$1`
+                `<script>(${lrClient()})('${getLrURL()}')</script>\n$1`
             )
     );
 }
