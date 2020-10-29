@@ -1,5 +1,5 @@
 const {tinds} = require('./../dist/tinds.cjs.js');
 
 tinds({
-    dir: 'test'
+    dir: 'test/public'
 })

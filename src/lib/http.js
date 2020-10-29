@@ -4,22 +4,16 @@ import path from 'path';
 import mime from './mime.json';
 import c from './colors';
 
-let default_options = {
-    port: 7000,
-    host: 'localhost',
-    index: 'index.html',
-    dir: 'public'
-}
+
 
 export function startHTTPServer(options){
-    const opt = Object.assign(default_options,options);
 
-    const static = mwStatic(opt);
+    const static = mwStatic(options);
 
     http.createServer(function (req, res) {
         static(req,res);
-    }).listen(opt.port,opt.host,_ => {
-        console.log(`Started server on ${c.blue(`http://${opt.host}:${opt.port}`)}`);
+    }).listen(options.port,options.host,_ => {
+        console.log(`Started server on ${c.blue(`http://${options.host}:${options.port}`)}`);
     });
 }
 

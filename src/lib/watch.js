@@ -3,13 +3,22 @@ import path from 'path';
 import c from './colors';
 
 export function startWatchers(options){
+    if(options.watch === null) {
+        options.watch = {};
+        options.watch[options.dir] = 'reload';
+    }
 
-    watchDir(options.dir, function(evt, name) {
-        console.log(evt, name);
-    });
+    if(options.watch){
 
-    console.log('Waiting for changes in directories:');
-    console.log(c.yellow(options.dir));
+        console.log('Waiting for changes in directories:');
+
+        Object.entries(options.watch).forEach(w=>{
+            watchDir(w[0], function(evt, name) {
+                console.log(evt, name,w[1]);
+            });
+            console.log('  '+c.yellow('- '+w[0]));
+        });
+    }
 }
 
 function watchDir(dirname,callback){
