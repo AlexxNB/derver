@@ -15,7 +15,7 @@ export function startWatchers(options){
 
         Object.entries(options.watch).forEach(w=>{
             watchDir(w[0], function(evt, name) {
-                console.log(evt, name,w[1]);
+                console.log(c.gray('   [watch] ')+c.yellow('Changes in ') + c.blue(w[0]));
                 if(w[1]=='reload') livereload('reload');
             });
             console.log('  '+c.yellow('- '+w[0]));

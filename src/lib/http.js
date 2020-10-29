@@ -55,6 +55,7 @@ function mwStatic(options){
     return function(req,res){
     
         if(!fs.existsSync(req.file)){
+            console.log(c.gray('   [web] ')+c.yellow(req.url) + ' - ' + c.red('404 Not Found'));
             res.writeHead(404, {'Content-Type': 'text/plain'});
             return res.end('Not found');
         }
@@ -64,6 +65,8 @@ function mwStatic(options){
         let body = fs.readFileSync(req.file);
 
         if(['.html','.htm'].includes(req.extname)) body = injectLivereload(body);
+
+        console.log(c.gray('   [web] ')+c.yellow(req.url) + ' - ' + c.green('200 OK'));
 
         return res.end(body);
     }
