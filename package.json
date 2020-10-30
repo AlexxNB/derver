@@ -1,14 +1,13 @@
 {
-  "name": "tinds",
+  "name": "derver",
   "version": "1.0.0",
-  "description": "Tiny Development Server for serving your web-application",
+  "description": "Tiny Development Server for your web-applications with livereload and watchers",
   "main": "dist/tinds.cjs.js",
   "module": "dist/tinds.esm.js",
   "scripts": {
     "build": "node esbuild",
     "prestart": "node esbuild --dev",
-    "start": "node test/test",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node test/test"
   },
   "repository": {
     "type": "git",
@@ -29,6 +28,6 @@
     "http"
   ],
   "devDependencies": {
-    "esbuild": "^0.7.21"
+    "esbuild": "^0.8.0"
   }
 }

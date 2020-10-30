@@ -17,7 +17,16 @@ export function startWatchers(options){
         for(let watchitem of options.watch){
             watchDir(watchitem, function(evt, name) {
                 console.log(c.gray('[watch] ')+'Changes in ' + c.blue(watchitem));
-                livereload('reload');
+
+                let lrFlag = true;
+                if(typeof options.onwatch === 'function'){
+
+                    options.onwatch({
+                        prevent: ()=>lrFlag=false,
+                        reload: ()=>livereload('reload'),
+                    },watchitem,name,evt)
+                }
+                if(lrFlag) livereload('reload');
             });
         }
     }

@@ -7,7 +7,8 @@ let default_options = {
     host: 'localhost',
     index: 'index.html',
     dir: 'public',
-    watch: null
+    watch: null,
+    onwatch: null
 }
 
 export async function tinds(options){
