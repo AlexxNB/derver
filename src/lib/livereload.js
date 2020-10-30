@@ -37,8 +37,10 @@ export function getLrURL(){
 // Must be a clean function. Will be injected in browser client in <script> tag.
 export function lrClient(){
     return (function(URL){
+        let timer;
 
-        if (!!window.EventSource) {
+        function livereload(){
+          if (!!window.EventSource) {
             var source = new EventSource(URL)
         
             source.addEventListener('refresh', function(e) {
@@ -46,6 +48,7 @@ export function lrClient(){
             }, false)
         
             source.addEventListener('open', function(e) {
+              if(timer) location.reload();
               console.log('[Livereload] Ready')
             }, false)
         
@@ -54,7 +57,8 @@ export function lrClient(){
               if (e.eventPhase == EventSource.CLOSED) source.close();
 
               if (e.target.readyState == EventSource.CLOSED) {
-                console.log("[Livereload] Disconnected!");
+                console.log("[Livereload] Disconnected! Retry in 5s...");
+                timer = setTimeout(livereload,5000);
               }else if (e.target.readyState == EventSource.CONNECTING) {
                 console.log("[Livereload] Connecting...");
               }
@@ -62,6 +66,9 @@ export function lrClient(){
           } else {
             console.error("[Livereload] Can't start Livereload! Your browser doesn't support SSE")
           }
+        }
+
+        livereload();
 
     }).toString(); 
 };
