@@ -3,23 +3,42 @@ import fs from 'fs';
 import path from 'path';
 import mime from './mime.json';
 import c from './colors';
+import {table} from './table';
 import {lrClient,lrMiddleware,getLrURL} from './livereload';
 
 export function startHTTPServer(options){
+    return new Promise((resolve,reject)=>{
+        const livereload = lrMiddleware(options);
+        const file = mwFile(options);
+        const static = mwStatic(options);
 
-    const livereload = lrMiddleware(options);
-    const file = mwFile(options);
-    const static = mwStatic(options);
+        const server = http.createServer(function (req, res) {
+            runMiddlewares([
+                livereload,
+                file,
+                static
+            ],req,res);
+        });
 
-    http.createServer(function (req, res) {
-        runMiddlewares([
-            livereload,
-            file,
-            static
-        ],req,res);
-    }).listen(options.port,options.host,_ => {
-        console.log(`Started server on ${c.blue(`http://${options.host}:${options.port}`)}`);
+        server.on('listening',_ => {
+            resolve(server);
+            table()
+                .line('Development server started','bold')
+                .line('on')
+                .line(`http://${options.host}:${options.port}`,'blue')
+                .print(5,'green')
+        })
+
+        server.on('error',e => {
+            console.log(c.bold('\n\nServer starting error:'));
+            console.log('  '+c.red(e.toString()) + '\n\n');
+            reject(e.toString());
+        })
+        
+        server.listen(options.port,options.host);
     });
+
+    
 }
 
 function runMiddlewares(mwArray,req,res){
@@ -55,7 +74,7 @@ function mwStatic(options){
     return function(req,res){
     
         if(!fs.existsSync(req.file)){
-            console.log(c.gray('   [web] ')+c.yellow(req.url) + ' - ' + c.red('404 Not Found'));
+            console.log(c.gray('  [web] ')+req.url + ' - ' + c.red('404 Not Found'));
             res.writeHead(404, {'Content-Type': 'text/plain'});
             return res.end('Not found');
         }
@@ -66,7 +85,7 @@ function mwStatic(options){
 
         if(['.html','.htm'].includes(req.extname)) body = injectLivereload(body);
 
-        console.log(c.gray('   [web] ')+c.yellow(req.url) + ' - ' + c.green('200 OK'));
+        console.log(c.gray('  [web] ')+req.url + ' - ' + c.green('200 OK'));
 
         return res.end(body);
     }

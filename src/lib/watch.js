@@ -5,21 +5,21 @@ import {livereload} from './livereload';
 
 export function startWatchers(options){
     if(options.watch === null) {
-        options.watch = {};
-        options.watch[options.dir] = 'reload';
+        options.watch = options.dir;
     }
+
+    if(typeof options.watch === 'string') options.watch = [options.watch];
 
     if(options.watch){
 
-        console.log('Waiting for changes in directories:');
+        console.log(c.yellow('       Waiting for changes...\n\n'));
 
-        Object.entries(options.watch).forEach(w=>{
-            watchDir(w[0], function(evt, name) {
-                console.log(c.gray('   [watch] ')+c.yellow('Changes in ') + c.blue(w[0]));
-                if(w[1]=='reload') livereload('reload');
+        for(let watchitem of options.watch){
+            watchDir(watchitem, function(evt, name) {
+                console.log(c.gray('[watch] ')+'Changes in ' + c.blue(watchitem));
+                livereload('reload');
             });
-            console.log('  '+c.yellow('- '+w[0]));
-        });
+        }
     }
 }
 
