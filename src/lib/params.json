@@ -1,0 +1,38 @@
+{
+    "name": "derver",
+    "description": "Derver is a tiny development web server with livereload and files watching.",
+    "usage":"[params] [serve dir]",
+    "params":[
+        {
+            "name": "host",
+            "help": "Host where to bind server"
+        },
+        {
+            "name": "port",
+            "help": "Port where to bind server"
+        },
+        {
+            "name": "index",
+            "help": "Index file for server"
+        },
+        {
+            "name": "watch",
+            "multiple": true,
+            "help": "Directory for watching. May be used multiple times."
+        },
+        {
+            "name": "no-watch",
+            "help": "Prevent any watching."
+        },
+        {
+            "name": "help",
+            "help": "Show usage information"
+        }
+    ],
+    "examples":[
+        "",
+        "dist/public",
+        "--host=0.0.0.0 --port=5000",
+        "--watch=dist/public --watch=src"
+    ]
+}

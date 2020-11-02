@@ -1,6 +1,6 @@
 import {startHTTPServer} from './lib/http';
 import {startWatchers} from './lib/watch';
-import {table} from './lib/table'
+export {livereload} from './lib/livereload';
 
 let default_options = {
     port: 7000,
@@ -11,7 +11,7 @@ let default_options = {
     onwatch: null
 }
 
-export async function tinds(options){
+export async function derver(options){
     const opt = Object.assign(default_options,options);
 
     try{

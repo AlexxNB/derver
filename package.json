@@ -2,12 +2,14 @@
   "name": "derver",
   "version": "1.0.0",
   "description": "Tiny Development Server for your web-applications with livereload and watchers",
-  "main": "dist/tinds.cjs.js",
-  "module": "dist/tinds.esm.js",
+  "main": "dist/derver.cjs.js",
+  "module": "dist/derver.esm.js",
+  "bin": "bin/derver.js",
   "scripts": {
     "build": "node esbuild",
     "prestart": "node esbuild --dev",
-    "start": "node test/test"
+    "start": "node test/test",
+    "bin": "./bin/derver"
   },
   "repository": {
     "type": "git",

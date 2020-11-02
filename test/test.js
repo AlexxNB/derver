@@ -1,6 +1,6 @@
-const {tinds} = require('./../dist/tinds.cjs.js');
+const {derver} = require('./../dist/derver.cjs.js');
 
-tinds({
+derver({
     dir: 'test/public',
     onwatch: (livereload,watcher,file,evt)=>{
         console.log('Hello',watcher,file,evt);

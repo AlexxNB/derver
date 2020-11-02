@@ -10,3 +10,4 @@ Tiny Development Server for your web-applications with livereload and watchers
 * SPA-mode
 * watching dirs and files
 * watch callback
+
