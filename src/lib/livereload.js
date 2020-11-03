@@ -2,8 +2,10 @@ const LR_URL = '/tinds-livereload-events';
 
 const listeners = new Set();
 
-export function livereload(event){
-    listeners.forEach(listener=>listener[event]());
+export function livereload(event,data){
+    listeners.forEach(listener=>{
+      if(typeof listener[event] == 'function') listener[event](data);
+    });
 }
 
 export function lrMiddleware(options){
@@ -11,7 +13,8 @@ export function lrMiddleware(options){
         if(req.url == LR_URL){
 
             const listener = {
-                reload: ()=>res.write('event: refresh\ndata: now\n\n')
+                reload: ()=>res.write('event: refresh\ndata: now\n\n'),
+                console: (str)=>res.write(`event: console\ndata: ${str}\n\n`)
             }
 
             listeners.add(listener);
@@ -45,6 +48,10 @@ export function lrClient(){
         
             source.addEventListener('refresh', function(e) {
                 location.reload();
+            }, false)
+
+            source.addEventListener('console', function(e) {
+                console.log(e.data);
             }, false)
         
             source.addEventListener('open', function(e) {

@@ -142,7 +142,11 @@ This function will be called when any file changes in watched directories.
 *Callback signature: (livereload,watchitem,filename,eventname)*
 
 #### `livereload`
-Object with `prevent` and `reload` methods. Calling `livereload.prevent()` will stop sheduled livereload action for this watch event. Run `livereload.reload()` each time you want to reload page in the browser.
+It is object with following methods:
+
+* `livereload.prevent()` - will stop sheduled livereload action for this watch event.
+* `livereload.reload()` - Run each time you want to reload page in the browser.
+* `livereload.console(message)` - Send a `message` to the browser console.
 
 ---
 

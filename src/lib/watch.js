@@ -24,6 +24,7 @@ export function startWatchers(options){
                     await options.onwatch({
                         prevent: ()=>lrFlag=false,
                         reload: ()=>livereload('reload'),
+                        console: (str)=>livereload('console',str),
                     },watchitem,name,evt)
                 }
                 if(lrFlag) livereload('reload');
