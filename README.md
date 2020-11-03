@@ -85,47 +85,76 @@ You may set configuration object as a parameter of the `derver` function. Below 
 
 #### `dir` *<string>*
 Directory which contains files for serving. If nothing set in `watch` option, it will be watching for changes also.
+
 *Default: public*
+
 *Example: dir: 'public'*
+
+---
 
 #### `host` *<string>*
 Interface, where bind the server. Use `0.0.0.0` inside docker or when need network connections to your site.
+
 *Default: localhost*
+
 *Example: host: 'localhost'*
+
+---
 
 #### `port` *<number>*
 Port, where bind the server. 
+
 *Default: 7000*
+
 *Example: port: 8080*
+
+---
 
 #### `index`  *<string>*
 Name of the root file of web directory. Webserver will lookup this file when no file specified in the requested URL. 
+
 *Default: index.html*
+
 *Example: index: 'index.htm'*
+
+---
 
 #### `watch` *<string>*|*<array of string>*
 Specify the directories for watching filechanges. Each time when files modified in theese directories, website will be reloaded and `onwatch` callback will be run. By default will be watched directory defined in `dir` option.
+
 *Default: null*
+
 *Example: watch: ['dist/public','src']*
+
+---
 
 #### `onwatch` *<function>*
 This function will be called when any file changes in watched directories.
+
 *Default: null*
+
 *Example: onwatch: (liverload,watchitem)=>{if(watchitem == 'src') livereload.prevent()})*
 
+---
 
-### onwatch-callback arguments
+### `onwatch`-callback arguments
 
 *Callback signature: (livereload,watchitem,filename,eventname)*
 
 #### `livereload`
 Object with `prevent` and `reload` methods. Calling `livereload.prevent()` will stop sheduled livereload action for this watch event. Run `livereload.reload()` each time you want to reload page in the browser.
 
+---
+
 #### `watchitem`
 It is a string with directory name where were fired filechange event. It is same string as you specified in `watch` option(or in `dir` option, if `watch` not set).
 
+---
+
 #### `filename`
 Full path of changed file (unstable)
+
+---
 
 #### `eventname`
 What exactly happened with modified file. 
