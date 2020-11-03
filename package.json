@@ -1,10 +1,12 @@
 {
   "name": "derver",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tiny Development Server for your web-applications with livereload and watchers",
   "main": "dist/derver.cjs.js",
   "module": "dist/derver.esm.js",
-  "bin": "bin/derver.js",
+  "bin": {
+    "derver": "bin/derver.js"
+  },
   "scripts": {
     "build": "node esbuild",
     "prestart": "node esbuild --dev",
