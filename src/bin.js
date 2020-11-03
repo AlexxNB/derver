@@ -16,6 +16,6 @@ if(input.params.host) options.port = input.params.host;
 if(input.params.port) options.port = input.params.port;
 if(input.params.index) options.index = input.params.index;
 if(input.params.watch) options.index = input.params.watch;
-if(input.params['no-watch']) options.watch = null;
+if(input.params['no-watch']) options.watch = false;
 
 derver(options);
