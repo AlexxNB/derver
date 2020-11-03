@@ -5,7 +5,7 @@
   "main": "dist/derver.cjs.js",
   "module": "dist/derver.esm.js",
   "bin": {
-    "derver": "bin/derver.js"
+    "derver": "bin/derver"
   },
   "scripts": {
     "build": "node esbuild",
