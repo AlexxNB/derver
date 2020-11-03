@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AlexxNB/tinds.git"
+    "url": "git+https://github.com/AlexxNB/derver.git"
   },
   "author": "Alexey Schebelev",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/AlexxNB/tinds/issues"
+    "url": "https://github.com/AlexxNB/derver/issues"
   },
-  "homepage": "https://github.com/AlexxNB/tinds#readme",
+  "homepage": "https://github.com/AlexxNB/derver#readme",
   "keywords": [
     "server",
     "devserver",
