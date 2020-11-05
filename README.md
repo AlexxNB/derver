@@ -83,7 +83,7 @@ By default, server will be started on [http://localhost:7000]() and serving `pub
 
 You may set configuration object as a parameter of the `derver` function. Below you find all possible options:
 
-#### `dir` *<string>*
+#### `dir` *string*
 Directory which contains files for serving. If nothing set in `watch` option, it will be watching for changes also.
 
 *Default: public*
@@ -92,7 +92,7 @@ Directory which contains files for serving. If nothing set in `watch` option, it
 
 ---
 
-#### `host` *<string>*
+#### `host` *string*
 Interface, where bind the server. Use `0.0.0.0` inside docker or when need network connections to your site.
 
 *Default: localhost*
@@ -101,7 +101,7 @@ Interface, where bind the server. Use `0.0.0.0` inside docker or when need netwo
 
 ---
 
-#### `port` *<number>*
+#### `port` *number*
 Port, where bind the server. 
 
 *Default: 7000*
@@ -110,7 +110,7 @@ Port, where bind the server.
 
 ---
 
-#### `index`  *<string>*
+#### `index`  *string*
 Name of the root file of web directory. Webserver will lookup this file when no file specified in the requested URL. 
 
 *Default: index.html*
@@ -119,7 +119,7 @@ Name of the root file of web directory. Webserver will lookup this file when no 
 
 ---
 
-#### `watch` *<string>*|*<array of string>*
+#### `watch` *string*|*array of string*
 Specify the directories for watching filechanges. Each time when files modified in theese directories, website will be reloaded and `onwatch` callback will be run. By default will be watched directory defined in `dir` option.
 
 *Default: null*
@@ -128,7 +128,7 @@ Specify the directories for watching filechanges. Each time when files modified 
 
 ---
 
-#### `onwatch` *<function>*
+#### `onwatch` *function*
 This function will be called when any file changes in watched directories.
 
 *Default: null*
@@ -163,3 +163,12 @@ Full path of changed file (unstable)
 
 #### `eventname`
 What exactly happened with modified file. 
+
+
+## How livereload works
+
+When you changes file in the watching directory, server will send command to the client side to reload current page. It is musthave feature when you developing web-application and want to see changes immideatly.
+
+Livereload made with [Server Side Events API](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events). It is perfect feature for one-way communication server with client based only on http protocol. It is why Derver is so tiny, no need to implement websocket communication as others known servers do.
+
+Some JavaScript code for livereload will be added before `</body>` element inside each requested `html` file.
