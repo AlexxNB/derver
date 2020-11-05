@@ -4,7 +4,7 @@ Tiny Development Server for your web-applications with livereload and watchers
 
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AlexxNB/derver/master/demo.gif">
+  <img src="https://github.com/AlexxNB/derver/raw/main/demo.gif">
 </p>
 
 ## Features
