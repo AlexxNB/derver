@@ -25,6 +25,7 @@ export function startWatchers(options){
                         prevent: ()=>lrFlag=false,
                         reload: ()=>livereload('reload'),
                         console: (str)=>livereload('console',str),
+                        error: (str,header)=>livereload('error',str,header),
                     },watchitem,name,evt)
                 }
                 if(lrFlag) livereload('reload');

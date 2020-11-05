@@ -12,9 +12,12 @@ export function lrMiddleware(options){
     return function(req,res,next){
         if(req.url == LR_URL){
 
+            const write = (evnt,data)=>res.write(`event: ${evnt}\ndata: ${JSON.stringify(data||{})}\n\n`)
+
             const listener = {
-                reload: ()=>res.write('event: refresh\ndata: now\n\n'),
-                console: (str)=>res.write(`event: console\ndata: ${str}\n\n`)
+                reload: ()=>write('refresh'),
+                console: (text)=>write('console',{text}),
+                error: (text,header)=>write('srverror',{text,header:(header||'Error')}),
             }
 
             listeners.add(listener);
@@ -44,14 +47,85 @@ export function lrClient(){
 
         function livereload(){
           if (!!window.EventSource) {
-            var source = new EventSource(URL)
+            var source = new EventSource(URL);
+
+            function getData(e){
+              return JSON.parse(e.data);
+            }
         
             source.addEventListener('refresh', function(e) {
                 location.reload();
             }, false)
 
             source.addEventListener('console', function(e) {
-                console.log(e.data);
+                console.log(getData(e).text);
+            }, false)
+
+            source.addEventListener('srverror', function(e) {
+                let data = getData(e);
+                const message = document.createElement('div');
+                message.innerHTML = `
+                  <div class="lrmsg-bg">
+                    <div class="lrmsg-modal">
+                      <div class="lrmsg-close" onclick="this.parentNode.parentNode.remove()">×</div>
+                      <div class="lrmsg-header">${data.header}</div>
+                      <div class="lrmsg-content">${data.text}</div>
+                    </div>
+                  </div>
+                  <style>
+                    .lrmsg-bg{
+                      font-family: Verdana, Geneva, sans-serif;
+                      font-size: 16px;
+                      background: rgba(0, 0, 0, 0.7);
+                      position: fixed;
+                      top: 0;
+                      right: 0;
+                      bottom: 0;
+                      left: 0;
+                    }
+
+                    .lrmsg-modal{
+                      position: relative;
+                      max-width: 600px;
+                      max-height: 400px;
+                      margin: 40px auto; 
+                      margin-top: 0px;
+                      background-color: white;
+                      border-top: 3px solid red;
+                      border-radius: 5px;
+                      opacity: 0;
+                      animation: slide 0.3s forwards;
+                    }
+
+                    .lrmsg-header{
+                      font-weight: bold;
+                      font-size: 18px;
+                      padding: 10px;
+                    }
+
+                    .lrmsg-close{
+                      float: right;
+                      font-weight: bold;
+                      color: silver;
+                      font-size: 25px;
+                      margin: 3px 10px;
+                      cursor: pointer;
+                    }
+
+                    .lrmsg-close:hover{color:black}
+
+                    .lrmsg-content{
+                      padding: 10px;
+                      border-top: 1px solid silver;
+                    }
+
+                    @keyframes slide {
+                      100% { margin-top: 40px; opacity: 1;}
+                  }
+                  </style>
+                `;
+
+                document.body.append(message);
             }, false)
         
             source.addEventListener('open', function(e) {
@@ -69,7 +143,7 @@ export function lrClient(){
               }else if (e.target.readyState == EventSource.CONNECTING) {
                 console.log("[Livereload] Connecting...");
               }
-            }, false)
+            }, false);
           } else {
             console.error("[Livereload] Can't start Livereload! Your browser doesn't support SSE")
           }
