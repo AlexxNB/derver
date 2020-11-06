@@ -6,10 +6,12 @@ import mime from './mime.json';
 import c from './colors';
 import {table} from './table';
 import {mwLivereload, mwInjectLivereload} from './livereload';
+import {version} from './../../package.json';
 
 export function startHTTPServer(options){
     return new Promise((resolve,reject)=>{
         const middlewares = [
+            mwServer(options),
             mwLivereload(options),
             mwFile(options),
             mwStatic(options),
@@ -79,6 +81,13 @@ function mwFile(options){
             req.exists = fs.existsSync(req.file);
         }
 
+        next();
+    }
+}
+
+function mwServer(options){
+    return function(req,res, next){
+        res.setHeader('Server', 'Derver/'+version);
         next();
     }
 }
