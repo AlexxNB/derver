@@ -9,7 +9,7 @@ Tiny Development Server for your web-applications with livereload and watchers
 
 ## Features
 
-* Very tiny (~5kb)
+* Very tiny (~8kb)
 * Livereload
 * Watch directories with callback
 * CLI or JS API
