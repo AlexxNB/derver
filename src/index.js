@@ -9,6 +9,7 @@ let default_options = {
     dir: 'public',
     compress: false,
     cache: false,
+    spa: false,
     watch: null,
     onwatch: null
 }

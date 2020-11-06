@@ -15,6 +15,7 @@ Tiny Development Server for your web-applications with livereload and watchers
 * CLI or JS API
 * Supports Gzip or Brotli compression
 * Cache control
+* Supports SPA mode
 
 ## CLI Usage
 
@@ -74,6 +75,10 @@ Will return files compressed by gzip or brotli, if client supports it.
 Add `Cache-control` header to the responce with `max-age` equal `31536000` (~1 year). You can specify number of seconds.
 *Example: --cache*
 *Example: --cache=3600*
+
+#### `--spa`
+Enables SPA (Single-Page Application) mode. All requested pages will be responced by index page in the application root, which is specified in `--index` parameter.
+*Example: --spa*
 
 ## Javascript API
 
@@ -141,6 +146,25 @@ Will return files compressed by gzip or brotli, if client supports it.
 *Default: false*
 
 *Example: compress: true*
+
+---
+
+#### `cache` *boolean*|*number*
+Add `Cache-control` header to the responce with `max-age` equal `31536000` (~1 year). You can specify number of seconds.
+
+*Default: false*
+
+*Example: cache: true*
+*Example: cache: 3600*
+
+---
+
+#### `spa` *boolean*
+Enables SPA (Single-Page Application) mode. All requested pages will be responced by index page in the application root, which is specified in `index` option.
+
+*Default: false*
+
+*Example: spa: true*
 
 ---
 

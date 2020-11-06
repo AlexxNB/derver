@@ -64,16 +64,20 @@ function runMiddlewares(mwArray,req,res){
 
 function mwFile(options){
     return function(req,res, next){
-        let file = path.join(options.dir,req.url);
-        let ext = path.extname(file);
+        req.file = path.join(options.dir,req.url);
+        req.extname = path.extname(req.file);
 
-        if(ext === ''){
-            file = path.join(file,options.index);
-            ext = path.extname(file);
+        if(req.extname === ''){
+            req.file = path.join(req.file,options.index);
+            req.extname = path.extname(req.file);
         }
 
-        req.file = file;
-        req.extname = ext;
+        req.exists = fs.existsSync(req.file);
+
+        if(options.spa && !req.exists && req.extname === path.extname(options.index)){
+            req.file = path.join(options.dir,options.index);
+            req.exists = fs.existsSync(req.file);
+        }
 
         next();
     }
@@ -83,7 +87,7 @@ function mwStatic(options){
     
     return function(req,res,next){
     
-        if(!fs.existsSync(req.file)){
+        if(!req.exists){
             console.log(c.gray('  [web] ')+req.url + ' - ' + c.red('404 Not Found'));
             res.writeHead(404, {'Content-Type': 'text/plain'});
             return res.end('Not found');
