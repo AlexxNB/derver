@@ -9,6 +9,7 @@ import {mwLivereload, mwInjectLivereload} from './livereload';
 import {version} from './../../package.json';
 
 export function startHTTPServer(options){
+    const production = (options.watch === false && options.cache && options.compress);
     return new Promise((resolve,reject)=>{
         const middlewares = [
             mwServer(options),
@@ -27,7 +28,7 @@ export function startHTTPServer(options){
         server.on('listening',_ => {
             resolve(server);
             table()
-                .line('Development server started','bold')
+                .line(production ? 'Derver server started' : 'Development server started','bold')
                 .line('on')
                 .line(`http://${options.host}:${options.port}`,'blue')
                 .print(5,'green')

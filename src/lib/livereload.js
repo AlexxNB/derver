@@ -9,6 +9,7 @@ export function livereload(event,data){
 }
 
 export function mwLivereload(options){
+    if(!options.watch) return null;
     return function(req,res,next){
         if(req.url == LR_URL){
 
@@ -155,6 +156,7 @@ function lrClient(){
 };
 
 export function mwInjectLivereload(options){
+  if(!options.watch) return null;
   return function(req,res,next){
     if(['.html','.htm'].includes(req.extname)){
       res.body = Buffer.from(

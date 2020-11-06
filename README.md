@@ -80,6 +80,11 @@ Add `Cache-control` header to the responce with `max-age` equal `31536000` (~1 y
 Enables SPA (Single-Page Application) mode. All requested pages will be responced by index page in the application root, which is specified in `--index` parameter.
 *Example: --spa*
 
+#### `--pruduction`
+Run server in production mode(realy not, use at own risk). It enables `--cache`, `--compress` and `--no-watch` parameters. Also host will set on `0.0.0.0` to handle connections from the network.
+
+*Example: --production*
+
 ## Javascript API
 
 You may use Derver in the your scripts to get more power.

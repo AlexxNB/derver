@@ -29,12 +29,16 @@
             "help": "Return files compressed by gzip or brotli, if client supports it."
         },
         {
-            "name": "compress",
-            "help": "Return files compressed by gzip or brotli, if client supports it."
+            "name": "cache",
+            "help": "Add Cache-control header."
         },
         {
             "name": "spa",
             "help": "Enaples SPA mode when all page requests will be responced by index page."
+        },
+        {
+            "name": "production",
+            "help": "Run server in production mode: enables --compress,--cache and--no-watch parameters"
         },
         {
             "name": "help",
@@ -45,6 +49,7 @@
         "",
         "dist/public",
         "--host=0.0.0.0 --port=5000",
-        "--watch=dist/public --watch=src"
+        "--watch=dist/public --watch=src",
+        "--production"
     ]
 }
