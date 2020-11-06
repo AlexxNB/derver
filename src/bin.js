@@ -13,9 +13,11 @@ let options = {};
 
 if(input.dir) options.dir = input.dir;
 if(input.params.host) options.port = input.params.host;
-if(input.params.port) options.port = input.params.port;
+if(input.params.port) options.port = Number(input.params.port);
 if(input.params.index) options.index = input.params.index;
 if(input.params.watch) options.index = input.params.watch;
 if(input.params['no-watch']) options.watch = false;
+if(input.params.compress) options.compress = true;
+if(input.params.cache) options.cache = input.params.cache === true ? true : Number(input.params.cache);
 
 derver(options);

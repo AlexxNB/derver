@@ -29,6 +29,10 @@
             "help": "Return files compressed by gzip or brotli, if client supports it."
         },
         {
+            "name": "cache",
+            "help": "Add Cache-Control header with year max age."
+        },
+        {
             "name": "help",
             "help": "Show usage information"
         }

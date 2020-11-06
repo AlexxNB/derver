@@ -9,10 +9,12 @@ Tiny Development Server for your web-applications with livereload and watchers
 
 ## Features
 
-* very tiny (~5kb)
-* livereload
-* watch directories with callback
+* Very tiny (~5kb)
+* Livereload
+* Watch directories with callback
 * CLI or JS API
+* Supports Gzip or Brotli compression
+* Cache control
 
 ## CLI Usage
 
@@ -61,12 +63,17 @@ Specify the directories for watching filechanges. Each time when files modified 
 *Example: --watch=dist/public --watch=src*
 
 #### `--no-watch`
-Add this parameter when you want to disable any watching and reloading. 
+Add this parameter when you want to disable any watching and livereloading. 
 *Example: --no-watch*
 
 #### `--compress`
 Will return files compressed by gzip or brotli, if client supports it.
 *Example: --compress*
+
+#### `--cache`
+Add `Cache-control` header to the responce with `max-age` equal `31536000` (~1 year). You can specify number of seconds.
+*Example: --cache*
+*Example: --cache=3600*
 
 ## Javascript API
 

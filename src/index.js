@@ -8,6 +8,7 @@ let default_options = {
     index: 'index.html',
     dir: 'public',
     compress: false,
+    cache: false,
     watch: null,
     onwatch: null
 }

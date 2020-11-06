@@ -14,7 +14,8 @@ export function startHTTPServer(options){
             mwFile(options),
             mwStatic(options),
             mwInjectLivereload(options),
-            options.compress && mwEncode(options)
+            mwEncode(options),
+            mwCache(options),
         ]
 
         const server = http.createServer(function (req, res) {
@@ -98,6 +99,9 @@ function mwStatic(options){
 
 
 function mwEncode(options){
+
+    if(!options.compress) return null;
+
     return function(req,res,next){
         if(req.headers['accept-encoding']){
             if(req.headers['accept-encoding'].includes('br')){
@@ -108,6 +112,17 @@ function mwEncode(options){
                  res.body = zlib.gzipSync(res.body); 
             }  
         }
+        next();
+    }
+}
+
+function mwCache(options){
+
+    if(!options.cache) return null;
+
+    return function(req,res,next){
+        if(typeof options.cache !== 'number') options.cache = 31536000;
+        res.setHeader('Cache-Control', 'max-age='+options.cache);
         next();
     }
 }
