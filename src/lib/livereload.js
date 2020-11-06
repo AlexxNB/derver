@@ -8,7 +8,7 @@ export function livereload(event,data){
     });
 }
 
-export function lrMiddleware(options){
+export function mwLivereload(options){
     return function(req,res,next){
         if(req.url == LR_URL){
 
@@ -41,7 +41,7 @@ export function getLrURL(){
 }
 
 // Must be a clean function. Will be injected in browser client in <script> tag.
-export function lrClient(){
+function lrClient(){
     return (function(URL){
         let timer;
 
@@ -153,3 +153,18 @@ export function lrClient(){
 
     }).toString(); 
 };
+
+export function mwInjectLivereload(options){
+  return function(req,res,next){
+    if(['.html','.htm'].includes(req.extname)){
+      res.body = Buffer.from(
+        res.body.toString('utf-8').replace(
+            /(<\/body>)/,
+            `<script>(${lrClient()})('${LR_URL}')</script>\n$1`
+        )
+      );
+    }
+    
+    next();
+  }
+}

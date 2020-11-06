@@ -4,20 +4,20 @@ import path from 'path';
 import mime from './mime.json';
 import c from './colors';
 import {table} from './table';
-import {lrClient,lrMiddleware,getLrURL} from './livereload';
+import {mwLivereload, mwInjectLivereload} from './livereload';
 
 export function startHTTPServer(options){
     return new Promise((resolve,reject)=>{
-        const livereload = lrMiddleware(options);
-        const file = mwFile(options);
-        const static = mwStatic(options);
+        const middlewares = [
+            mwLivereload(options),
+            mwFile(options),
+            mwStatic(options),
+            mwInjectLivereload(options),
+            mwGzip(options)
+        ]
 
         const server = http.createServer(function (req, res) {
-            runMiddlewares([
-                livereload,
-                file,
-                static
-            ],req,res);
+            runMiddlewares(middlewares,req,res);
         });
 
         server.on('listening',_ => {
@@ -42,6 +42,9 @@ export function startHTTPServer(options){
 }
 
 function runMiddlewares(mwArray,req,res){
+
+    mwArray.push((req,res)=>res.end(res.body||''))
+
     let mayContinue = false;
     const next = ()=>mayContinue=true;
 
@@ -51,6 +54,7 @@ function runMiddlewares(mwArray,req,res){
         if(!mayContinue) break;
     }
 }
+
 
 function mwFile(options){
     return function(req,res, next){
@@ -71,7 +75,7 @@ function mwFile(options){
 
 function mwStatic(options){
     
-    return function(req,res){
+    return function(req,res,next){
     
         if(!fs.existsSync(req.file)){
             console.log(c.gray('  [web] ')+req.url + ' - ' + c.red('404 Not Found'));
@@ -80,25 +84,17 @@ function mwStatic(options){
         }
 
         mime[req.extname] ? res.writeHead(200, {'Content-Type': mime[req.extname]}) : res.writeHead(200);
-
-        let body = fs.readFileSync(req.file);
-
-        if(['.html','.htm'].includes(req.extname)) body = injectLivereload(body);
-
+        res.body = fs.readFileSync(req.file);
         console.log(c.gray('  [web] ')+req.url + ' - ' + c.green('200 OK'));
-
-        return res.end(body);
+        next();
     }
 }
 
-function injectLivereload(body){
-    return Buffer.from(
-        body
-            .toString('utf-8')
-            .replace(
-                /(<\/body>)/,
-                `<script>(${lrClient()})('${getLrURL()}')</script>\n$1`
-            )
-    );
+
+function mwGzip(options){
+    return function(req,res,next){
+        console.log(req.headers);
+        next();
+    }
 }
 
