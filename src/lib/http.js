@@ -1,6 +1,7 @@
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
+import zlib from 'zlib';
 import mime from './mime.json';
 import c from './colors';
 import {table} from './table';
@@ -13,7 +14,7 @@ export function startHTTPServer(options){
             mwFile(options),
             mwStatic(options),
             mwInjectLivereload(options),
-            mwGzip(options)
+            options.compress && mwEncode(options)
         ]
 
         const server = http.createServer(function (req, res) {
@@ -43,12 +44,16 @@ export function startHTTPServer(options){
 
 function runMiddlewares(mwArray,req,res){
 
-    mwArray.push((req,res)=>res.end(res.body||''))
+    mwArray.push((req,res)=>{
+        res.writeHead(200);
+        res.end(res.body||'');
+    })
 
     let mayContinue = false;
     const next = ()=>mayContinue=true;
 
     for(let mw of mwArray){
+        if(typeof mw !== 'function') continue;
         mayContinue = false;
         mw(req,res,next);
         if(!mayContinue) break;
@@ -83,7 +88,8 @@ function mwStatic(options){
             return res.end('Not found');
         }
 
-        mime[req.extname] ? res.writeHead(200, {'Content-Type': mime[req.extname]}) : res.writeHead(200);
+        if(mime[req.extname]) res.setHeader('Content-Type', mime[req.extname]);
+
         res.body = fs.readFileSync(req.file);
         console.log(c.gray('  [web] ')+req.url + ' - ' + c.green('200 OK'));
         next();
@@ -91,9 +97,17 @@ function mwStatic(options){
 }
 
 
-function mwGzip(options){
+function mwEncode(options){
     return function(req,res,next){
-        console.log(req.headers);
+        if(req.headers['accept-encoding']){
+            if(req.headers['accept-encoding'].includes('br')){
+               res.setHeader('Content-Encoding', 'br');
+                res.body = zlib.brotliCompressSync(res.body);
+            }else if(req.headers['accept-encoding'].includes('gzip')){
+                res.setHeader('Content-Encoding', 'gzip');
+                 res.body = zlib.gzipSync(res.body); 
+            }  
+        }
         next();
     }
 }

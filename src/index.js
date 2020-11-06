@@ -7,6 +7,7 @@ let default_options = {
     host: 'localhost',
     index: 'index.html',
     dir: 'public',
+    compress: false,
     watch: null,
     onwatch: null
 }

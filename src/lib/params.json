@@ -25,6 +25,10 @@
             "help": "Prevent any watching."
         },
         {
+            "name": "compress",
+            "help": "Return files compressed by gzip or brotli, if client supports it."
+        },
+        {
             "name": "help",
             "help": "Show usage information"
         }

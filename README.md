@@ -64,6 +64,10 @@ Specify the directories for watching filechanges. Each time when files modified 
 Add this parameter when you want to disable any watching and reloading. 
 *Example: --no-watch*
 
+#### `--compress`
+Will return files compressed by gzip or brotli, if client supports it.
+*Example: --compress*
+
 ## Javascript API
 
 You may use Derver in the your scripts to get more power.
@@ -121,6 +125,15 @@ Name of the root file of web directory. Webserver will lookup this file when no 
 *Default: index.html*
 
 *Example: index: 'index.htm'*
+
+---
+
+#### `compress` *boolean*
+Will return files compressed by gzip or brotli, if client supports it.
+
+*Default: false*
+
+*Example: compress: true*
 
 ---
 
