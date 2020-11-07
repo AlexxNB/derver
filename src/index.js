@@ -17,6 +17,8 @@ let default_options = {
 export async function derver(options){
     const opt = Object.assign(default_options,options);
 
+    if(opt.watch === null) opt.watch = opt.dir;
+
     try{
         await startHTTPServer(opt);
     }catch{

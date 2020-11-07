@@ -4,10 +4,7 @@ import c from './colors';
 import {livereload} from './livereload';
 
 export function startWatchers(options){
-    if(options.watch === null) {
-        options.watch = options.dir;
-    }
-
+    
     if(typeof options.watch === 'string') options.watch = [options.watch];
 
     if(options.watch){
