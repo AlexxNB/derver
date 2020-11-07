@@ -1,6 +1,6 @@
 {
   "name": "derver",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Tiny Development Server for your web-applications with livereload and watchers",
   "main": "dist/derver.cjs.js",
   "module": "dist/derver.esm.js",
