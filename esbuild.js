@@ -38,3 +38,16 @@ build({
 }).catch((e) => {
     process.exit(1);
 })
+
+//Rollup plugin
+build({
+    entryPoints: ['./src/plugins/rollup.js'],
+    platform: 'node',
+    format: "cjs",
+    outfile: './rollup-plugin.js',
+    minify: !DEV,
+    bundle: true,
+    external: ['./dist/derver.cjs.js']
+}).catch((e) => {
+    process.exit(1);
+})
