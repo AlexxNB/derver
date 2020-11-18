@@ -1,4 +1,4 @@
-const LR_URL = '/tinds-livereload-events';
+const LR_URL = '/derver-livereload-events';
 
 const listeners = new Set();
 
