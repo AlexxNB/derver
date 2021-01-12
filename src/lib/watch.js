@@ -15,11 +15,20 @@ export function startWatchers(options){
         process.on('SIGTERM', ()=>watchers.forEach(w=>w.close()));
         process.on('exit', ()=>watchers.forEach(w=>w.close()));
 
+        const cooldown = new Set();
+        const debounce = (key, fn)=>{
+            if(cooldown.has(key)) return;
+            cooldown.add(key);
+            setTimeout(()=>cooldown.delete(key),100);
+            fn();
+        }
+
         for(let watchitem of options.watch){
             watchers.push(
                 watch(watchitem,{recursive: true}, async function(evt, name) {
-                    console.log(c.gray('[watch] ')+'Changes in ' + c.blue(watchitem));
 
+                    debounce(watchitem,()=>console.log(c.gray('[watch] ')+'Changes in ' + c.blue(watchitem)));
+                
                     let lrFlag = true;
                     if(typeof options.onwatch === 'function'){
 
