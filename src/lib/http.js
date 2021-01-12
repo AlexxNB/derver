@@ -42,6 +42,9 @@ export function startHTTPServer(options){
         })
         
         server.listen(options.port,options.host);
+
+        process.on('SIGTERM', ()=>server.close());
+        process.on('exit', ()=>server.close());
     });    
 }
 
