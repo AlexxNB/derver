@@ -10,22 +10,29 @@ export function startWatchers(options){
 
         console.log(c.yellow('       Waiting for changes...\n\n'));
 
+        const watchers = [];
+        
+        process.on('SIGTERM', ()=>watchers.forEach(w=>w.close()));
+        process.on('exit', ()=>watchers.forEach(w=>w.close()));
+
         for(let watchitem of options.watch){
-            watch(watchitem,{recursive: true}, async function(evt, name) {
-                console.log(c.gray('[watch] ')+'Changes in ' + c.blue(watchitem));
+            watchers.push(
+                watch(watchitem,{recursive: true}, async function(evt, name) {
+                    console.log(c.gray('[watch] ')+'Changes in ' + c.blue(watchitem));
 
-                let lrFlag = true;
-                if(typeof options.onwatch === 'function'){
+                    let lrFlag = true;
+                    if(typeof options.onwatch === 'function'){
 
-                    await options.onwatch({
-                        prevent: ()=>lrFlag=false,
-                        reload: ()=>livereload('reload'),
-                        console: (str)=>livereload('console',str),
-                        error: (str,header)=>livereload('error',str,header),
-                    },watchitem,name,evt)
-                }
-                if(lrFlag) livereload('reload');
-            })
+                        await options.onwatch({
+                            prevent: ()=>lrFlag=false,
+                            reload: ()=>livereload('reload'),
+                            console: (str)=>livereload('console',str),
+                            error: (str,header)=>livereload('error',str,header),
+                        },watchitem,name,evt)
+                    }
+                    if(lrFlag) livereload('reload');
+                })
+            );
         }
     }
 }
