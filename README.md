@@ -219,6 +219,57 @@ Full path of changed file (unstable)
 What exactly happened with modified file. 
 
 
+## Using Middlewares
+
+You may use any common middleware(like Express middlewares) to add additional functionality for you server. `derver()` function returns the object with methods:
+ - `use` - run middleware for all HTTP methods
+ - `get` - run middleware for GET method only
+ - `post` - run middleware for POST method only
+ - ...actually you can write any HTTP method here
+
+ ```js
+ derver()
+  .use(middleware1)
+  .get('/api',middleware2)
+  .put('/clear',middleware3,middleware4)
+
+ ```
+
+ ### Pattern
+
+ If first argument for theese methods is a pattern of the URL, middleware will run only if request's URL is matched with its path. 
+
+ The pattern may looks like `/foo` of `/foo/bar`. If no pattern provided, middleware will run on each request.
+
+ Pattern also may have a parameters `/user/:name` and when URL will be `/user/bob` or `/user/alex` you can get the value(alex or bob) from `request.params.name` property.
+
+  ```js
+ derver()
+  .use('/user/:name',middleware)
+
+ ```
+
+ ### Writing middleware function 
+
+ The middleware functions gets three arguments - common Node's `request`,`responce` objects and `next` function, which will run next middleware. If your middleware doesn't responce on request, you must run `next()` or request never will be ended.
+
+ Lets see an example for client and API middleware:
+
+ ```js
+  function myLogMiddleware(req,resp,next){
+    console.log('Current URL is: ' + req.url);
+    next();
+  }
+
+  function myHelloMiddleware(req,resp){
+    resp.send('Hello, '+req.params.name);
+  }
+
+  derver()
+    .use(myLogMiddleware)
+    .get('/hello/:name',myHelloMiddleware)
+ ```
+
 ## How livereload works
 
 When you changes file in the watching directory, server will send command to the client side to reload current page. It is musthave feature when you developing web-application and want to see changes immideatly.

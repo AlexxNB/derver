@@ -11,18 +11,19 @@ import {version} from './../../package.json';
 export function startHTTPServer(options){
     const production = (options.watch === false && options.cache && options.compress);
     return new Promise((resolve,reject)=>{
-        const middlewares = [
-            mwServer(options),
-            mwLivereload(options),
-            mwFile(options),
-            mwStatic(options),
-            mwInjectLivereload(options),
-            mwEncode(options),
-            mwCache(options),
-        ]
 
         const server = http.createServer(function (req, res) {
-            runMiddlewares(middlewares,req,res);
+            runMiddlewares([
+                mwSend(options),
+                mwServer(options),
+                ...options.middlewares.list(),
+                mwLivereload(options),
+                mwFile(options),
+                mwStatic(options),
+                mwInjectLivereload(options),
+                mwEncode(options),
+                mwCache(options),
+            ],req,res);
         });
 
         server.on('listening',_ => {
@@ -41,27 +42,58 @@ export function startHTTPServer(options){
         })
         
         server.listen(options.port,options.host);
-    });
+    });    
+}
 
+export function createMiddlwaresList(){
+    const middlewares = [];
+
+    function addMiddleware(obj){
+        for(mw of obj.middlewares){
+            middlewares.push(function(req,res,next){
+                if(obj.method && obj.method !== req.method) return next();
     
+                if(obj.pattern){
+                    const params = getParams(obj.pattern,req.url);
+                    if(!params) return next();
+                    req.params = params; 
+                }
+                
+                mw(req,res,next);
+            });
+        }
+    }
+
+    function parseArguments(args,name){
+        args = Array.from(args);
+        return {
+            method: name == 'use' ? null : name.toUpperCase(),
+            pattern: args.length > 0 && typeof args[0] == 'string' ? args.shift() : null,
+            middlewares: args.filter(fn => typeof fn == 'function')
+        }
+    }
+
+    return new Proxy({},{
+        get(_, name) {
+            if(name == 'list') return ()=>middlewares;
+            return function(){addMiddleware(parseArguments(arguments,name))};
+        }
+    })
 }
 
 function runMiddlewares(mwArray,req,res){
 
-    mwArray.push((req,res)=>{
-        res.writeHead(200);
-        res.end(res.body||'');
-    })
+    mwArray.push((req,res)=>res.send(res.body||''))
 
-    let mayContinue = false;
-    const next = ()=>mayContinue=true;
-
-    for(let mw of mwArray){
-        if(typeof mw !== 'function') continue;
-        mayContinue = false;
-        mw(req,res,next);
-        if(!mayContinue) break;
+    const next = ()=>{
+        let mw;
+        while(!mw && mwArray.length > 0){
+            mw = mwArray.shift();
+        }
+        mw && mw(req,res,next);
     }
+
+    next();
 }
 
 
@@ -82,6 +114,16 @@ function mwFile(options){
             req.exists = fs.existsSync(req.file);
         }
 
+        next();
+    }
+}
+
+function mwSend(options){
+    return function(req,res, next){
+        res.send = function(message){
+            res.writeHead(200);
+            res.end(message);
+        }
         next();
     }
 }
@@ -141,3 +183,17 @@ function mwCache(options){
     }
 }
 
+export function getParams(pattern,path){
+    const keys = [];
+    let params = {};
+    let rx = pattern
+       .split('/')
+       .map(s => s.startsWith(':') ? (keys.push(s.slice(1)),'([^\\/]+)') : s)
+       .join('\\/');
+
+    const match = path.match(new RegExp(`^${rx}$`));
+    if(!match) return null;
+    keys.forEach((key,i) => params[key] = match[i+1]);
+
+    return params
+}

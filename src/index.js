@@ -1,4 +1,4 @@
-import {startHTTPServer} from './lib/http';
+import {startHTTPServer,createMiddlwaresList} from './lib/http';
 import {startWatchers} from './lib/watch';
 export {livereload} from './lib/livereload';
 
@@ -14,16 +14,20 @@ let default_options = {
     onwatch: null
 }
 
-export async function derver(options){
-    const opt = Object.assign(default_options,options);
+export function derver(options){
+    const opt = Object.assign(default_options,options,{middlewares:createMiddlwaresList()});
 
-    if(opt.watch === null) opt.watch = opt.dir;
+    (async()=>{
+        if(opt.watch === null) opt.watch = opt.dir;
 
-    try{
-        await startHTTPServer(opt);
-    }catch{
-        process.exit(1);
-    }
+        try{
+            await startHTTPServer(opt);
+        }catch{
+            process.exit(1);
+        }
+        
+        startWatchers(opt);
+    })()
     
-    startWatchers(opt);
+    return opt.middlewares;
 }

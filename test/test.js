@@ -11,3 +11,7 @@ derver({
         // livereload.prevent(); livereload.error('Error text','Build error');
     }
 })
+  .get('/hello/:name',(req,res,next)=>{
+    res.writeHead(200);
+    res.end('Hello,'+req.params.name+'!');
+  });
