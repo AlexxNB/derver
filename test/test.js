@@ -1,7 +1,8 @@
 const {derver} = require('./../dist/derver.cjs.js');
 
-derver({
+const app = derver({
     dir: 'test/public',
+    spa: true,
   //  watch: false,
   //  cache: true,
   //  compress: true,
@@ -11,7 +12,9 @@ derver({
         // livereload.prevent(); livereload.error('Error text','Build error');
     }
 })
-  .get('/hello/:name',(req,res,next)=>{
+
+app.get('/hello/:name',(req,res,next)=>{
+    console.log('HELLO')
     res.writeHead(200);
     res.end('Hello,'+req.params.name+'!');
   });

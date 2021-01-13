@@ -76,12 +76,17 @@ export function createMiddlwaresList(){
         }
     }
 
-    return new Proxy({},{
+    const methods = new Proxy({},{
         get(_, name) {
             if(name == 'list') return ()=>middlewares;
-            return function(){addMiddleware(parseArguments(arguments,name))};
+            return function(){
+                addMiddleware(parseArguments(arguments,name));
+                return methods;
+            };
         }
-    })
+    });
+
+    return methods;
 }
 
 function runMiddlewares(mwArray,req,res){
