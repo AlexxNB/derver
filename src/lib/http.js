@@ -52,8 +52,10 @@ export function createMiddlwaresList(){
     const middlewares = [];
 
     function addMiddleware(obj){
-        for(mw of obj.middlewares){
+       
+        for(let mw of obj.middlewares){
             middlewares.push(function(req,res,next){
+                
                 if(obj.method && obj.method !== req.method) return next();
     
                 if(obj.pattern){
@@ -61,7 +63,6 @@ export function createMiddlwaresList(){
                     if(!params) return next();
                     req.params = params; 
                 }
-                
                 mw(req,res,next);
             });
         }
@@ -91,7 +92,7 @@ export function createMiddlwaresList(){
 
 function runMiddlewares(mwArray,req,res){
 
-    mwArray.push((req,res)=>res.send(res.body||''))
+    mwArray.push((req,res)=>res.send(res.body||''));
 
     const next = ()=>{
         let mw;

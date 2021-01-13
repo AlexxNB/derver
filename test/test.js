@@ -13,8 +13,15 @@ const app = derver({
     }
 })
 
+app.use((req,res,next)=>{
+    console.log('HELLO');
+    next();
+});
+
+
 app.get('/hello/:name',(req,res,next)=>{
-    console.log('HELLO')
+  console.log('HELLO2');
     res.writeHead(200);
     res.end('Hello,'+req.params.name+'!');
-  });
+});
+
