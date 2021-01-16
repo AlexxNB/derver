@@ -26,6 +26,10 @@ app.get('/hello/:name',(req,res,next)=>{
 });
 
 app.sub('/test',a => {
+  a.get('/',(req,res,next)=>{
+    console.log('HELLO4');
+    next();
+  })
   a.get('/:name',(req,res)=>{
     console.log('HELLO3');
     res.writeHead(200);

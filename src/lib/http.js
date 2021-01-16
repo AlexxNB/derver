@@ -59,9 +59,9 @@ export function createMiddlwaresList(){
                 if(obj.method && obj.method !== req.method) return next();
     
                 if(obj.pattern && obj.pattern !== ''){
-                    const params = getParams(obj.pattern,req.url);
-                    if(!params) return next();
-                    req.params = params; 
+                    const match = getRouteMatch(obj.pattern,req.url);
+                    if(!match || (obj.exact && !match.exact)) return next();
+                    req.params = match.params; 
                 }
                 mw(req,res,next);
             });
@@ -70,9 +70,12 @@ export function createMiddlwaresList(){
 
     function parseArguments(args,name,pattern){
         args = Array.from(args);
+        let subpattern = args.length > 0 && typeof args[0] == 'string' ? args.shift() : null;
+        if(subpattern && !subpattern.startsWith('/')) subpattern = '/'+subpattern;
         return {
             method: name == 'use' ? null : name.toUpperCase(),
-            pattern: (pattern||'')+(args.length > 0 && typeof args[0] == 'string' ? args.shift() : ''),
+            pattern: (pattern||'')+(subpattern||''),
+            exact:!(pattern && !subpattern),
             middlewares: args.filter(fn => typeof fn == 'function')
         }
     }
@@ -201,17 +204,28 @@ function mwCache(options){
     }
 }
 
-export function getParams(pattern,path){
+export function getRouteMatch(pattern,path){
+    pattern = pattern.endsWith('/') ? pattern : pattern + '/';
+    path = path.endsWith('/') ? path : path + '/';
     const keys = [];
     let params = {};
+    let exact = true;
     let rx = pattern
        .split('/')
        .map(s => s.startsWith(':') ? (keys.push(s.slice(1)),'([^\\/]+)') : s)
        .join('\\/');
 
-    const match = path.match(new RegExp(`^${rx}$`));
+    let match = path.match(new RegExp(`^${rx}$`));
+    if(!match) {
+        exact = false;
+        match = path.match(new RegExp(`^${rx}`));
+    }
     if(!match) return null;
     keys.forEach((key,i) => params[key] = match[i+1]);
 
-    return params
+    return {
+        exact,
+        params,
+        part:match[0].slice(0,-1)
+    }
 }
