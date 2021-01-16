@@ -25,3 +25,10 @@ app.get('/hello/:name',(req,res,next)=>{
     res.end('Hello,'+req.params.name+'!');
 });
 
+app.sub('/test',a => {
+  a.get('/:name',(req,res)=>{
+    console.log('HELLO3');
+    res.writeHead(200);
+    res.end('Hello,'+req.params.name+'!');
+  })
+})

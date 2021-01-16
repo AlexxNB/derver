@@ -222,6 +222,7 @@ What exactly happened with modified file.
 ## Using Middlewares
 
 You may use any common middleware(like Express middlewares) to add additional functionality for you server. `derver()` function returns the object with methods:
+ - `sub` - run callback to register middlewares for specified subpath
  - `use` - run middleware for all HTTP methods
  - `get` - run middleware for GET method only
  - `post` - run middleware for POST method only
@@ -269,6 +270,31 @@ You may use any common middleware(like Express middlewares) to add additional fu
     .use(myLogMiddleware)
     .get('/hello/:name',myHelloMiddleware)
  ```
+
+### Nested middlewares 
+
+In case you need to run middlewares which are situated under specified sub path use `.sub()` method.
+
+```js
+
+derver()
+  .sub('/api',(app)=>
+    // will run on  every request starting with '/api/...'
+    app.use(myLogMiddleware);
+
+    // will run when URL will be '/api/hello/bob'
+    app.get('/hello/bob',myHelloMiddleware);
+
+    app.sub('/users',(app)=>{
+        // will run when URL will be '/api/users/add'
+        app.post('/add',myUserAddMiddleware);
+    })
+  })
+
+```
+
+
+
 
 ## How livereload works
 

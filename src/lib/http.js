@@ -58,7 +58,7 @@ export function createMiddlwaresList(){
                 
                 if(obj.method && obj.method !== req.method) return next();
     
-                if(obj.pattern){
+                if(obj.pattern && obj.pattern !== ''){
                     const params = getParams(obj.pattern,req.url);
                     if(!params) return next();
                     req.params = params; 
@@ -68,26 +68,35 @@ export function createMiddlwaresList(){
         }
     }
 
-    function parseArguments(args,name){
+    function parseArguments(args,name,pattern){
         args = Array.from(args);
         return {
             method: name == 'use' ? null : name.toUpperCase(),
-            pattern: args.length > 0 && typeof args[0] == 'string' ? args.shift() : null,
+            pattern: (pattern||'')+(args.length > 0 && typeof args[0] == 'string' ? args.shift() : ''),
             middlewares: args.filter(fn => typeof fn == 'function')
         }
     }
 
-    const methods = new Proxy({},{
-        get(_, name) {
-            if(name == 'list') return ()=>middlewares;
-            return function(){
-                addMiddleware(parseArguments(arguments,name));
-                return methods;
-            };
-        }
-    });
+    function getMethods(pattern){
+        const methods = new Proxy({},{
+            get(_, name) {
+                if(name == 'list') return ()=>middlewares;
+                if(name == 'sub') return function(){
+                    let args = Array.from(arguments);
+                    let parentPattern = (pattern||'')+args.shift();
+                    args.forEach(fn => fn(getMethods(parentPattern)));
+                };
+                return function(){
+                    addMiddleware(parseArguments(arguments,name,pattern));
+                    return methods;
+                };
+            }
+        });
+        return methods;
+    }
+    
 
-    return methods;
+    return getMethods();
 }
 
 function runMiddlewares(mwArray,req,res){
