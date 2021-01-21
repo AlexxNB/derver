@@ -1,5 +1,6 @@
 import http from 'http';
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import zlib from 'zlib';
 import mime from './mime.json';
@@ -11,6 +12,8 @@ import {version} from './../../package.json';
 export function startHTTPServer(options){
     const production = (options.watch === false && options.cache && options.compress);
     return new Promise((resolve,reject)=>{
+        
+        const clearSID = saveSID(options);
 
         const server = http.createServer(function (req, res) {
             runMiddlewares([
@@ -43,8 +46,13 @@ export function startHTTPServer(options){
         
         server.listen(options.port,options.host);
 
-        process.on('SIGTERM', ()=>server.close());
-        process.on('exit', ()=>server.close());
+        const onclose = ()=>{
+            clearSID();
+            server.close();
+        }
+
+        process.on('SIGTERM', onclose);
+        process.on('exit', onclose);
     });    
 }
 
@@ -228,4 +236,12 @@ export function getRouteMatch(pattern,path){
         params,
         part:match[0].slice(0,-1)
     }
+}
+
+function saveSID(options){
+    const tmp = os.tmpdir();
+    if(typeof options.remote !== 'string') return ()=>{};
+    const file = path.join(tmp,'derver_'+options.remote);
+    fs.writeFileSync(file,JSON.stringify({host:options.host,port:options.port}));
+    return ()=>fs.unlinkSync(file);
 }

@@ -1,4 +1,7 @@
 import http from 'http';
+import os from 'os';
+import path from 'path';
+import fs from 'fs';
 
 const LR_URL = '/derver-livereload-events';
 const LR_REMOTE_URL = '/derver-livereload-remote';
@@ -12,9 +15,19 @@ export function livereload(event,data){
 }
 
 export function createRemote(options){
-    const hostname = (options && options.host) || 'localhost';
-    const port = (options && options.port) || 7000;
 
+    let hostname = 'localhost';
+    let port = 7000;
+
+    if(typeof options == 'string'){
+        const config = getRemoteConfig(options);
+        config && config.host && (hostname = config.host);
+        config && config.port && (port = config.port);
+    }else{
+        options && options.host && (hostname = options.host)
+        options && options.port && (hostname = options.port)
+    }
+    
     const req_options = {
         hostname,
         port,
@@ -238,4 +251,11 @@ export function mwInjectLivereload(options){
     
     next();
   }
+}
+
+function getRemoteConfig(name){
+    const tmp = os.tmpdir();
+    const file = path.join(tmp,'derver_'+name);
+    if(!fs.existsSync(file)) return false;
+    return JSON.parse(fs.readFileSync(file,'utf-8'));
 }

@@ -198,14 +198,17 @@ Specify the directories for watching filechanges. Each time when files modified 
 
 ---
 
-#### `remote` *boolean*
+#### `remote` *boolean*|*string*
 Enables remote control listener. See [Remote control](#remote-control)
 
 
 *Default: false*
 
 
-*Example: watch: ['dist/public','src']*
+*Example: remote: true*
+
+
+*Example: remote: "my_dev_server"*
 
 ---
 
@@ -331,6 +334,8 @@ import {createRemote} from 'derver';
 
 // Create remote object with parameters of running server
 const remote = createRemote({host:'localhost',port:7000}); // there are defaults, may be dropped
+
+// Also you can call `createRemote('my_dev_server)` with server ID specified in remote option.
 
 // Reload page in all opened browser windows
 remote.reload();

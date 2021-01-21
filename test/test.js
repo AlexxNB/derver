@@ -3,7 +3,7 @@ const {derver,createRemote} = require('./../dist/derver.cjs.js');
 const app = derver({
     dir: 'test/public',
     spa: true,
-    remote: true,
+    remote: 'testname',
   //  watch: false,
   //  cache: true,
   //  compress: true,
@@ -38,5 +38,5 @@ app.sub('/test',a => {
   })
 })
 
-const remote = createRemote();
+const remote = createRemote('testname');
 setTimeout(()=>remote.console('Hello from remote'),4000);
