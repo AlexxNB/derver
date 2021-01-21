@@ -39,4 +39,4 @@ app.sub('/test',a => {
 })
 
 const remote = createRemote('testname');
-setTimeout(()=>remote.console('Hello from remote'),4000);
+setTimeout(()=>remote.error('Hello from remote','Header here'),4000);

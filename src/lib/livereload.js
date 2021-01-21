@@ -8,38 +8,40 @@ const LR_REMOTE_URL = '/derver-livereload-remote';
 
 const listeners = new Set();
 
-export function livereload(event,data){
+export function livereload(event,p1,p2){
   listeners.forEach(listener=>{
-      if(typeof listener[event] == 'function') listener[event](data);
+      if(typeof listener[event] == 'function') listener[event](p1,p2);
     });
 }
 
 export function createRemote(options){
 
-    let hostname = 'localhost';
+    const remoteID = typeof options == 'string' ? options : false;
+
+    let host = 'localhost';
     let port = 7000;
 
-    if(typeof options == 'string'){
-        const config = getRemoteConfig(options);
-        config && config.host && (hostname = config.host);
-        config && config.port && (port = config.port);
-    }else{
-        options && options.host && (hostname = options.host)
-        options && options.port && (hostname = options.port)
-    }
-    
-    const req_options = {
-        hostname,
-        port,
-        path: LR_REMOTE_URL,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        }
+    if(!remoteID){
+        options && options.host && (host = options.host)
+        options && options.port && (port = options.port)
     }
 
     function sendCommand(command,data){
-        return new Promise((resolve,reject)=>{
+        return new Promise((resolve)=>{
+
+            const config = remoteID && getRemoteConfig(remoteID);
+            config && config.host && (hostname = config.host);
+            config && config.port && (port = config.port)
+
+            const req_options = {
+                hostname: (config && config.host) || host,
+                port: (config && config.port) || port,
+                path: LR_REMOTE_URL,
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            }
             const req = http.request(req_options, (res)=>{
                 res.on('data',(chunk)=>{
                     if(chunk.toString()==='REMOTE OK')
