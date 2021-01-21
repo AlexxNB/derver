@@ -147,13 +147,40 @@ function lrClient(){
 
             source.addEventListener('srverror', function(e) {
                 let data = getData(e);
-                const message = document.createElement('div');
+                showModal(data.header,data.text);
+            }, false);
+        
+            source.addEventListener('open', function(e) {
+              if(timer) location.reload();
+              console.log('[Livereload] Ready')
+            }, false)
+
+            source.addEventListener('error', function(e) {
+
+              if (e.eventPhase == EventSource.CLOSED) source.close();
+
+              
+              if (e.target.readyState == EventSource.CLOSED) {
+                console.log("[Livereload] Disconnected! Retry in 5s...");
+                !timer && showModal('Disconnected!','Connection with server was lost.');
+                timer = setTimeout(livereload,5000);
+              }else if (e.target.readyState == EventSource.CONNECTING) {
+                console.log("[Livereload] Connecting...");
+              }
+            }, false);
+          } else {
+            console.error("[Livereload] Can't start Livereload! Your browser doesn't support SSE")
+          }
+        }
+
+        function showModal(header,text){
+          const message = document.createElement('div');
                 message.innerHTML = `
                   <div class="lrmsg-bg">
                     <div class="lrmsg-modal">
                       <div class="lrmsg-close" onclick="this.parentNode.parentNode.remove()">×</div>
-                      <div class="lrmsg-header">${data.header}</div>
-                      <div class="lrmsg-content">${data.text}</div>
+                      <div class="lrmsg-header">${header}</div>
+                      <div class="lrmsg-content">${text}</div>
                     </div>
                   </div>
                   <style>
@@ -210,27 +237,6 @@ function lrClient(){
                 `;
 
                 document.body.append(message);
-            }, false)
-        
-            source.addEventListener('open', function(e) {
-              if(timer) location.reload();
-              console.log('[Livereload] Ready')
-            }, false)
-        
-            source.addEventListener('error', function(e) {
-
-              if (e.eventPhase == EventSource.CLOSED) source.close();
-
-              if (e.target.readyState == EventSource.CLOSED) {
-                console.log("[Livereload] Disconnected! Retry in 5s...");
-                timer = setTimeout(livereload,5000);
-              }else if (e.target.readyState == EventSource.CONNECTING) {
-                console.log("[Livereload] Connecting...");
-              }
-            }, false);
-          } else {
-            console.error("[Livereload] Can't start Livereload! Your browser doesn't support SSE")
-          }
         }
 
         livereload();
