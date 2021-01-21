@@ -112,7 +112,9 @@ You may set configuration object as a parameter of the `derver` function. Below 
 #### `dir` *string*
 Directory which contains files for serving. If nothing set in `watch` option, it will be watching for changes also.
 
+
 *Default: public*
+
 
 *Example: dir: 'public'*
 
@@ -121,7 +123,9 @@ Directory which contains files for serving. If nothing set in `watch` option, it
 #### `host` *string*
 Interface, where bind the server. Use `0.0.0.0` inside docker or when need network connections to your site.
 
+
 *Default: localhost*
+
 
 *Example: host: 'localhost'*
 
@@ -130,7 +134,9 @@ Interface, where bind the server. Use `0.0.0.0` inside docker or when need netwo
 #### `port` *number*
 Port, where bind the server. 
 
+
 *Default: 7000*
+
 
 *Example: port: 8080*
 
@@ -148,7 +154,9 @@ Name of the root file of web directory. Webserver will lookup this file when no 
 #### `compress` *boolean*
 Will return files compressed by gzip or brotli, if client supports it.
 
+
 *Default: false*
+
 
 *Example: compress: true*
 
@@ -157,9 +165,13 @@ Will return files compressed by gzip or brotli, if client supports it.
 #### `cache` *boolean*|*number*
 Add `Cache-control` header to the responce with `max-age` equal `31536000` (~1 year). You can specify number of seconds.
 
+
 *Default: false*
 
+
 *Example: cache: true*
+
+
 *Example: cache: 3600*
 
 ---
@@ -167,7 +179,9 @@ Add `Cache-control` header to the responce with `max-age` equal `31536000` (~1 y
 #### `spa` *boolean*
 Enables SPA (Single-Page Application) mode. All requested pages will be responced by index page in the application root, which is specified in `index` option.
 
+
 *Default: false*
+
 
 *Example: spa: true*
 
@@ -176,7 +190,20 @@ Enables SPA (Single-Page Application) mode. All requested pages will be responce
 #### `watch` *string*|*array of string*
 Specify the directories for watching filechanges. Each time when files modified in theese directories, website will be reloaded and `onwatch` callback will be run. By default will be watched directory defined in `dir` option.
 
+
 *Default: null*
+
+
+*Example: watch: ['dist/public','src']*
+
+---
+
+#### `remote` *boolean*
+Enables remote control listener. See [Remote control](#remote-control)
+
+
+*Default: false*
+
 
 *Example: watch: ['dist/public','src']*
 
@@ -185,7 +212,9 @@ Specify the directories for watching filechanges. Each time when files modified 
 #### `onwatch` *function*
 This function will be called when any file changes in watched directories.
 
+
 *Default: null*
+
 
 *Example: onwatch: (liverload,watchitem)=>{if(watchitem == 'src') livereload.prevent()})*
 
@@ -293,7 +322,27 @@ derver()
 
 ```
 
+## Remote control
 
+There is a way to perform some actions in curently oppened browser windows. For example you want to reload page from external script.
+
+```js
+import {createRemote} from 'derver';
+
+// Create remote object with parameters of running server
+const remote = createRemote({host:'localhost',port:7000}); // there are defaults, may be dropped
+
+// Reload page in all opened browser windows
+remote.reload();
+
+// Send some text in the browser console
+remote.console('Hello!');
+
+// Show modal with error message
+remote.error('Error happened! Fix it as soon as possible!','Error header');
+```
+
+*Note: don't forget to enable `remote` option in Derver's configuration*
 
 
 ## How livereload works

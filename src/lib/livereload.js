@@ -1,15 +1,60 @@
+import http from 'http';
+
 const LR_URL = '/derver-livereload-events';
+const LR_REMOTE_URL = '/derver-livereload-remote';
 
 const listeners = new Set();
 
 export function livereload(event,data){
-    listeners.forEach(listener=>{
+  listeners.forEach(listener=>{
       if(typeof listener[event] == 'function') listener[event](data);
     });
 }
 
+export function createRemote(options){
+    const hostname = (options && options.host) || 'localhost';
+    const port = (options && options.port) || 7000;
+
+    const req_options = {
+        hostname,
+        port,
+        path: LR_REMOTE_URL,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+
+    function sendCommand(command,data){
+        return new Promise((resolve,reject)=>{
+            const req = http.request(req_options, (res)=>{
+                res.on('data',(chunk)=>{
+                    if(chunk.toString()==='REMOTE OK')
+                        resolve('OK')
+                    else {
+                        console.log('[Derver remote]: Warning: wrong command ' + command)
+                        resolve('WARNING');
+                    }
+                });
+            });
+            req.on('error', (e)=>{
+              console.log('[Derver remote]: Warning:' + e.message)
+                resolve('WARNING');
+            });
+            req.write(JSON.stringify({command,data:data||{}}));
+            req.end();
+        });
+    }
+
+    return {
+        reload(){return sendCommand('reload')},
+        console(text){return sendCommand('console',{text})},
+        error(text,header){return sendCommand('error',{text,header})}
+    }
+}
+
 export function mwLivereload(options){
-    if(!options.watch) return null;
+    if(!options.watch && !options.remote) return null;
     return function(req,res,next){
         if(req.url == LR_URL){
 
@@ -30,15 +75,38 @@ export function mwLivereload(options){
             });
 
             res.on('close', function() {
-                listeners.delete(listener);
+              listeners.delete(listener);
             });
             res.write('data: connected\n\n')
-        }else next();
+        }else if(options.remote && req.url == LR_REMOTE_URL){
+            if(req.method == 'POST'){
+                let json = '';
+
+                req.on('data', chunk => {
+                    json += chunk.toString();
+                });
+
+                req.on('end', () => {
+                    const request = JSON.parse(json||'{}');
+
+                    if(request.command == 'reload') livereload('reload');
+                    else if(request.command == 'console') livereload('console',request.data.text);
+                    else if(request.command == 'error') livereload('error',request.data.text,request.data.header);
+                    else return res.end('REMOTE WRONG COMMAND');
+
+                    res.end('REMOTE OK');
+                });
+            }else next();
+        } else next();
     }
 }
 
 export function getLrURL(){
     return LR_URL;
+}
+
+export function getRemoteURL(){
+    return LR_REMOTE_URL;
 }
 
 // Must be a clean function. Will be injected in browser client in <script> tag.

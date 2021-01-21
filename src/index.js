@@ -1,6 +1,6 @@
 import {startHTTPServer,createMiddlwaresList} from './lib/http';
 import {startWatchers} from './lib/watch';
-export {livereload} from './lib/livereload';
+export {createRemote} from './lib/livereload';
 
 let default_options = {
     port: 7000,
@@ -11,7 +11,8 @@ let default_options = {
     cache: false,
     spa: false,
     watch: null,
-    onwatch: null
+    onwatch: null,
+    remote: false
 }
 
 export function derver(options){

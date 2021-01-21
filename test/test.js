@@ -1,8 +1,9 @@
-const {derver} = require('./../dist/derver.cjs.js');
+const {derver,createRemote} = require('./../dist/derver.cjs.js');
 
 const app = derver({
     dir: 'test/public',
     spa: true,
+    remote: true,
   //  watch: false,
   //  cache: true,
   //  compress: true,
@@ -36,3 +37,6 @@ app.sub('/test',a => {
     res.end('Hello,'+req.params.name+'!');
   })
 })
+
+const remote = createRemote();
+setTimeout(()=>remote.console('Hello from remote'),4000);
