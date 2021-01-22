@@ -187,12 +187,13 @@ function lrClient(){
                     .lrmsg-bg{
                       font-family: Verdana, Geneva, sans-serif;
                       font-size: 16px;
-                      background: rgba(0, 0, 0, 0.7);
+                      background: rgba(30, 30, 30, 0.6);
                       position: fixed;
                       top: 0;
                       right: 0;
                       bottom: 0;
                       left: 0;
+                      z-index: 1;
                     }
 
                     .lrmsg-modal{
@@ -201,11 +202,12 @@ function lrClient(){
                       max-height: 400px;
                       margin: 40px auto; 
                       margin-top: 0px;
-                      background-color: white;
+                      background-color: #1e1e1e;
                       border-top: 3px solid red;
                       border-radius: 5px;
                       opacity: 0;
                       animation: slide 0.3s forwards;
+                      color: #cccccc;
                     }
 
                     .lrmsg-header{
@@ -217,17 +219,17 @@ function lrClient(){
                     .lrmsg-close{
                       float: right;
                       font-weight: bold;
-                      color: silver;
+                      color: #cccccc;
                       font-size: 25px;
                       margin: 3px 10px;
                       cursor: pointer;
                     }
 
-                    .lrmsg-close:hover{color:black}
+                    .lrmsg-close:hover{color:#9a9a9a}
 
                     .lrmsg-content{
                       padding: 10px;
-                      border-top: 1px solid silver;
+                      border-top: 1px solid #363636;
                     }
 
                     @keyframes slide {

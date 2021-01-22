@@ -10,7 +10,8 @@ const app = derver({
     onwatch: (livereload,watcher,file,evt)=>{
         console.log('Hello',watcher,file,evt);
         // livereload.prevent(); livereload.console('Hello');
-        // livereload.prevent(); livereload.error('Error text','Build error');
+         livereload.prevent(); livereload.error('Error text','Build error');
+
     }
 })
 
@@ -37,6 +38,7 @@ app.sub('/test',a => {
     res.end('Hello,'+req.params.name+'!');
   })
 })
-
+/*
 const remote = createRemote('testname');
 setTimeout(()=>remote.error('Hello from remote','Header here'),4000);
+*/
