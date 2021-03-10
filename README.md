@@ -303,6 +303,16 @@ You may use any common middleware(like Express middlewares) to add additional fu
     .get('/hello/:name',myHelloMiddleware)
  ```
 
+### Additional data from incoming request extension
+
+The `request` argument is Node's [http.IncomingMessage object](https://nodejs.org/api/http.html#http_class_http_incomingmessage). But it is expanded with few useful data:
+* `path` - pathname of current URL 
+* `search` - query params as a string
+* `query` - query params as an object
+* `host` - host from header(including port)
+* `hostname` - host from header(without port)
+* `port` - port from header
+ 
 ### Nested middlewares 
 
 In case you need to run middlewares which are situated under specified sub path use `.sub()` method.

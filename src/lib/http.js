@@ -1,5 +1,6 @@
 import http from 'http';
-import fs from 'fs';
+import url from 'url';
+import fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
 import zlib from 'zlib';
@@ -11,12 +12,13 @@ import {version} from './../../package.json';
 
 export function startHTTPServer(options){
     const production = (options.watch === false && options.cache && options.compress);
-    return new Promise((resolve,reject)=>{
+    return new Promise(async (resolve,reject)=>{
         
-        const clearSID = saveSID(options);
+        const clearSID = await saveSID(options);
 
         const server = http.createServer(function (req, res) {
             runMiddlewares([
+                mwURLParse(options),
                 mwSend(options),
                 mwServer(options),
                 ...options.middlewares.list(),
@@ -46,8 +48,8 @@ export function startHTTPServer(options){
         
         server.listen(options.port,options.host);
 
-        const onclose = ()=>{
-            clearSID();
+        const onclose = async ()=>{
+            await clearSID();
             server.close();
         }
 
@@ -125,10 +127,22 @@ function runMiddlewares(mwArray,req,res){
     next();
 }
 
+function mwURLParse(options){
+    return function(req,res, next){
+        const parts = new URL(req.url,'http://'+(req.headers.host || 'derver.tld'));
+        req.path = parts.pathname;
+        req.host = parts.host;
+        req.hostname = parts.hostname;
+        req.port = parts.port;
+        req.search = parts.search;
+        req.query = Array.from(parts.searchParams).reduce((obj,[name,value])=>(obj[name]=value,obj),{});
+        next();
+    }
+}
 
 function mwFile(options){
-    return function(req,res, next){
-        req.file = path.join(options.dir,req.url);
+    return async function(req, res, next){
+        req.file = path.join(options.dir,req.path);
         req.extname = path.extname(req.file);
 
         if(req.extname === ''){
@@ -136,11 +150,11 @@ function mwFile(options){
             req.extname = path.extname(req.file);
         }
 
-        req.exists = fs.existsSync(req.file);
+        req.exists = await isExists(req.file);
 
         if(options.spa && !req.exists && req.extname === path.extname(options.index)){
             req.file = path.join(options.dir,options.index);
-            req.exists = fs.existsSync(req.file);
+            req.exists = await isExists(req.file);
         }
 
         next();
@@ -157,6 +171,8 @@ function mwSend(options){
     }
 }
 
+
+
 function mwServer(options){
     return function(req,res, next){
         res.setHeader('Server', 'Derver/'+version);
@@ -166,7 +182,7 @@ function mwServer(options){
 
 function mwStatic(options){
     
-    return function(req,res,next){
+    return async function(req,res,next){
     
         if(!req.exists){
             console.log(c.gray('  [web] ')+req.url + ' - ' + c.red('404 Not Found'));
@@ -176,7 +192,7 @@ function mwStatic(options){
 
         if(mime[req.extname]) res.setHeader('Content-Type', mime[req.extname]);
 
-        res.body = fs.readFileSync(req.file);
+        res.body = await fs.readFile(req.file);
         console.log(c.gray('  [web] ')+req.url + ' - ' + c.green('200 OK'));
         next();
     }
@@ -238,10 +254,19 @@ export function getRouteMatch(pattern,path){
     }
 }
 
-function saveSID(options){
+async function saveSID(options){
     const tmp = os.tmpdir();
     if(typeof options.remote !== 'string') return ()=>{};
     const file = path.join(tmp,'derver_'+options.remote);
-    fs.writeFileSync(file,JSON.stringify({host:options.host,port:options.port}));
-    return ()=>fs.unlinkSync(file);
+    await fs.writeFile(file,JSON.stringify({host:options.host,port:options.port}));
+    return async ()=>await fs.unlink(file);
+}
+
+async function isExists(file){
+    try{
+        await fs.stat(file);
+        return true
+    }catch{
+        return false
+    }
 }
