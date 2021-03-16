@@ -1,5 +1,4 @@
 import http from 'http';
-import url from 'url';
 import fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
