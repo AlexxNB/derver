@@ -248,7 +248,7 @@ function lrClient(){
 
 export function mwInjectLivereload(options){
   
-  if(!options.watch) return null;
+  if(!options.watch && !options.remote) return null;
   return function(req,res,next){
     if(['.html','.htm'].includes(req.extname)){
       res.body = Buffer.from(
