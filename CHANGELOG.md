@@ -1,6 +1,12 @@
 # Derver changelog
 
-## unreleased
+## 0.4.14 - 2021-03-20
+
+### Bug Fixes
+
+- 🐛 Livereload doesn't work when no watchers, but uses remote. ([#1](https://github.com/AlexxNB/derver/issues/1)) [`dc79b251`](https://github.com/AlexxNB/derver/commit/dc79b251f1d518dc6c0a22a25cdae558f2e6ed84)
+
+    *fix [#1](https://github.com/AlexxNB/derver/issues/1)*
 
 ## 0.4.13 - 2021-03-10
 
