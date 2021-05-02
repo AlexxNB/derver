@@ -68,7 +68,7 @@ export function createMiddlwaresList(){
                 if(obj.method && obj.method !== req.method) return next();
     
                 if(obj.pattern && obj.pattern !== ''){
-                    const match = getRouteMatch(obj.pattern,req.url);
+                    const match = getRouteMatch(obj.pattern,req.path);
                     if(!match || (obj.exact && !match.exact)) return next();
                     req.params = match.params; 
                 }
