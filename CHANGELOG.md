@@ -1,5 +1,17 @@
 # Derver changelog
 
+## 0.4.15 - 2021-05-02
+
+### Features
+
+- Allow nested index fallbaks in SPA mode [`16e52070`](https://github.com/AlexxNB/derver/commit/16e52070e992cd252171099aeba12bcf0d419d7d)
+
+    *If there is some sub directory contents index.html then unexistent URL with first part matched this subdirectory will fallback to this index file instead root one.*
+
+### Bug Fixes
+
+- 🐛 Last param from URL contents also a query part [`10c775ec`](https://github.com/AlexxNB/derver/commit/10c775ec9bd4968564d21212b9db77886ec4c11d)
+
 ## 0.4.14 - 2021-03-20
 
 ### Bug Fixes
