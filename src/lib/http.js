@@ -152,8 +152,15 @@ function mwFile(options){
         req.exists = await isExists(req.file);
 
         if(options.spa && !req.exists && req.extname === path.extname(options.index)){
-            req.file = path.join(options.dir,options.index);
-            req.exists = await isExists(req.file);
+            console.log()
+            let dir = path.dirname(req.file);
+            do{
+                dir = path.dirname(dir)
+                req.file = path.join(dir,options.index);
+                req.exists = await isExists(req.file);
+                if(req.exists) break;
+            } while(dir !== '.')
+            
         }
 
         next();
