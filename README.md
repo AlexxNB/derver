@@ -23,9 +23,9 @@ Tiny Development Server for your web-applications with livereload and watchers
 derver [parameters] [serve_directory]
 ```
 
-You may use `npx derver` instantly  or install globally by `npm install -g derver` and then use comand `derver`.
+You may use `npx derver` instantly  or install globally by `npm install -g derver` and then use command `derver`.
 
-To serve and watching curent directory just run:
+To serve and watching current directory just run:
 
 ```sh
 derver
@@ -44,7 +44,7 @@ In this example, `public` is a directory where are files for serving. By default
 ### List of possible parameters
 
 #### `--host`
-Interface, where bind the server. Use `0.0.0.0` inside docker or when need network connections to your site.
+Interface, where bind the server. Use `0.0.0.0` inside Docker container or when need network connections to your site.
 *Default: localhost*
 *Example: --host=localhost*
 
@@ -59,7 +59,7 @@ Name of the root file of web directory. Webserver will lookup this file when no 
 *Example: --index=index.htm*
 
 #### `--watch`
-Specify the directories for watching filechanges. Each time when files modified in theese directories, website will be reloaded. You may use this parameter multiple times to set more than one directory for watching.
+Specify the directories for watching files changes. Each time when files modified in these directories, website will be reloaded. You may use this parameter multiple times to set more than one directory for watching.
 *Default: watch the served directory*
 *Example: --watch=dist/public --watch=src*
 
@@ -72,16 +72,16 @@ Will return files compressed by gzip or brotli, if client supports it.
 *Example: --compress*
 
 #### `--cache`
-Add `Cache-control` header to the responce with `max-age` equal `31536000` (~1 year). You can specify number of seconds.
+Add `Cache-control` header to the response with `max-age` equal `31536000` (~1 year). You can specify number of seconds.
 *Example: --cache*
 *Example: --cache=3600*
 
 #### `--spa`
-Enables SPA (Single-Page Application) mode. All requested pages will be responced by index page in the application root, which is specified in `--index` parameter.
+Enables SPA (Single-Page Application) mode. All requested pages will be responsed by index page in the application root, which is specified in `--index` parameter.
 *Example: --spa*
 
-#### `--pruduction`
-Run server in production mode(realy not, use at own risk). It enables `--cache`, `--compress` and `--no-watch` parameters. Also host will set on `0.0.0.0` to handle connections from the network.
+#### `--production`
+Run server in production mode(really not, use at own risk). It enables `--cache`, `--compress` and `--no-watch` parameters. Also host will set on `0.0.0.0` to handle connections from the network.
 
 *Example: --production*
 
@@ -103,7 +103,7 @@ import {derver} from 'derver';
 derver();
 ```
 
-By default, server will be started on [http://localhost:7000]() and serving `public` directory on your workdir.
+By default, server will be started on [http://localhost:7000]() and serve `public` directory in your workdir.
 
 ### Configuration
 
@@ -163,7 +163,7 @@ Will return files compressed by gzip or brotli, if client supports it.
 ---
 
 #### `cache` *boolean*|*number*
-Add `Cache-control` header to the responce with `max-age` equal `31536000` (~1 year). You can specify number of seconds.
+Add `Cache-control` header to the response with `max-age` equal `31536000` (~1 year). You can specify number of seconds.
 
 
 *Default: false*
@@ -270,7 +270,7 @@ You may use any common middleware(like Express middlewares) to add additional fu
 
  ### Pattern
 
- If first argument for theese methods is a pattern of the URL, middleware will run only if request's URL is matched with its path. 
+ If first argument for these methods is a pattern of the URL, middleware will run only if request's URL is matched with its path. 
 
  The pattern may looks like `/foo` of `/foo/bar`. If no pattern provided, middleware will run on each request.
 
@@ -284,7 +284,7 @@ You may use any common middleware(like Express middlewares) to add additional fu
 
  ### Writing middleware function 
 
- The middleware functions gets three arguments - common Node's `request`,`responce` objects and `next` function, which will run next middleware. If your middleware doesn't responce on request, you must run `next()` or request never will be ended.
+ The middleware functions gets three arguments - common Node's `request`,`response` objects and `next` function, which will run next middleware. If your middleware doesn't response on request, you must run `next()` or request never will be ended.
 
  Lets see an example for client and API middleware:
 
@@ -337,7 +337,7 @@ derver()
 
 ## Remote control
 
-There is a way to perform some actions in curently oppened browser windows. For example you want to reload page from external script.
+There is a way to perform some actions in currently opened browser windows. For example you want to reload page from external script.
 
 ```js
 import {createRemote} from 'derver';
@@ -362,8 +362,8 @@ remote.error('Error happened! Fix it as soon as possible!','Error header');
 
 ## How livereload works
 
-When you changes file in the watching directory, server will send command to the client side to reload current page. It is musthave feature when you developing web-application and want to see changes immideatly.
+When you changes file in the watching directory, server will send command to the client side to reload current page. It is musthave feature when you developing web-application and want to see changes immediately.
 
-Livereload made with [Server Side Events API](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events). It is perfect feature for one-way communication server with client based only on http protocol. It is why Derver is so tiny, no need to implement websocket communication as others known servers do.
+Livereload made with [Server Sent Events API](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events). It is perfect feature for one-way communication server with client based only on http protocol. It is why Derver is so tiny, no need to implement websocket communication as others known servers do.
 
 Some JavaScript code for livereload will be added before `</body>` element inside each requested `html` file.
