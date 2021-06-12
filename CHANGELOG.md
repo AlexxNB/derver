@@ -6,6 +6,11 @@
 
 - 📝 Fix some mistakes [`cbc6d30e`](https://github.com/AlexxNB/derver/commit/cbc6d30eb5f5bc61190df6e8238a4c003ecda927)
 
+### Other
+
+- Merge branch 'main' of github.com:AlexxNB/derver into main [`0b76ccdf`](https://github.com/AlexxNB/derver/commit/0b76ccdfda9bdef2440b089706e860ce8a10ccce)
+- update dapendencies [`21174900`](https://github.com/AlexxNB/derver/commit/21174900c30c804640dbd97bc2b07664374e50db)
+
 ## 0.4.15 - 2021-05-02
 
 ### Features
