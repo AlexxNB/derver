@@ -32,7 +32,7 @@
     "http"
   ],
   "devDependencies": {
-    "esbuild": "^0.8.0",
-    "node-watch": "^0.7.0"
+    "esbuild": "^0.12.8",
+    "node-watch": "^0.7.1"
   }
 }
