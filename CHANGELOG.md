@@ -2,6 +2,12 @@
 
 ## unreleased
 
+### Other
+
+- Merge branch 'main' of github.com:AlexxNB/derver into main [`554a0eb8`](https://github.com/AlexxNB/derver/commit/554a0eb89f1c7407316dfb76016cb943a53de207)
+
+## 0.4.16 - 2021-06-12
+
 ### Documentation
 
 - 📝 Fix some mistakes [`cbc6d30e`](https://github.com/AlexxNB/derver/commit/cbc6d30eb5f5bc61190df6e8238a4c003ecda927)
