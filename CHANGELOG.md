@@ -1,5 +1,11 @@
 # Derver changelog
 
+## unreleased
+
+### Documentation
+
+- 📝 Fix some mistakes [`cbc6d30e`](https://github.com/AlexxNB/derver/commit/cbc6d30eb5f5bc61190df6e8238a4c003ecda927)
+
 ## 0.4.15 - 2021-05-02
 
 ### Features
