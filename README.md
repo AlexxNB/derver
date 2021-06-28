@@ -211,6 +211,18 @@ Enables remote control listener. See [Remote control](#remote-control)
 *Example: remote: "my_dev_server"*
 
 ---
+---
+
+#### `parseJson` *boolean*
+When incoming request sent with type `application/json` Derver will parse its body and put object in `request.body`.
+
+
+*Default: true*
+
+
+*Example: parseJson: true*
+
+---
 
 #### `onwatch` *function*
 This function will be called when any file changes in watched directories.
@@ -312,6 +324,12 @@ The `request` argument is Node's [http.IncomingMessage object](https://nodejs.or
 * `host` - host from header(including port)
 * `hostname` - host from header(without port)
 * `port` - port from header
+
+If request sent with type `application/json` you will get the parsed object from `request.body`. To avoid this, set `parseJson` option to `false`;
+
+### Send JSON object in responce
+
+Method `responce.send(message)` will send content of message with status code 200. If `message` is a simple object, Derver will automaticly stringify it and send to client with `Content-type: application/json` header.
  
 ### Nested middlewares 
 

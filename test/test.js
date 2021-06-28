@@ -27,6 +27,11 @@ app.get('/hello/:name',(req,res,next)=>{
     res.end('Hello,'+req.params.name+'!');
 });
 
+app.post('/jsontest',(req,res,next)=>{
+    console.log(req.body);
+    res.send({message: 'Hello '+req.body.name});
+});
+
 app.sub('/test',a => {
   a.get('/',(req,res,next)=>{
     console.log('HELLO4');

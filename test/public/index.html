@@ -4,10 +4,25 @@
         <title>Test-app</title>
         <link rel='stylesheet' href='assets/style.css'>
     </head>
+    <script type="text/javascript">
+        function testJSON(){
+            fetch('/jsontest',{
+                method: 'POST',
+                headers: {'Content-Type': 'application/json;charset=UTF-8'},
+                body: JSON.stringify({name:'World'})
+            }).then( res => {
+                res.json().then( obj => {
+                    alert(obj.message);
+                });
+            }).catch(err => console.log(err));
+        }
+    </script>
     <body>
         <h1> Test Derver</h1>
         <div style="width: 400px;">
             <p>Lorem ipsum vitae bibendum fusce porta risus ut proin duis ligula auctor congue cursus vivamus eros odio proin porta pharetra. Nam, ut amet ligula, metus lorem pharetra proin orci nulla ligula porta sem massa tellus molestie curabitur sodales molestie in at metus cursus quisque. Leo ultricies maecenas: metus, nibh sagittis sit metus pellentesque bibendum at cursus&nbsp;&mdash; ipsum, sagittis, nec metus sem, orci leo orci ut elementum adipiscing orci. Maecenas, auctor amet, mattis massa congue a vivamus eget risus sodales odio congue commodo integer risus <b>mattis urna</b> gravida, nec maecenas nec pellentesque, ornare ultricies. Eget sit mauris pellentesque morbi donec tellus morbi, sem, urna bibendum. Eros justo, gravida mauris vivamus elementum cursus&nbsp;&mdash; ligula quam eu gravida commodo nam metus mattis rutrum enim. Orci: sem eget pharetra tellus diam tempus sem porttitor, eu ligula cursus, molestie vulputate rutrum justo elementum, sagittis fusce quisque vivamus sed odio.</p><p>Fusce nec lectus sodales maecenas quisque vulputate curabitur&nbsp;&mdash; massa sapien auctor curabitur: duis adipiscing amet integer. Donec sagittis et, fusce in urna massa adipiscing fusce sapien. Tellus gravida diam curabitur ipsum, amet in justo, rutrum ligula nibh donec, morbi massa. Sodales rutrum lorem, odio <i>in nulla</i>, orci auctor: proin&nbsp;&mdash; ut magna metus massa molestie porttitor. Sodales magna rutrum mauris sagittis nulla eros gravida, bibendum pellentesque eget porta ultricies arcu cursus integer porta bibendum sapien: sagittis. Magna bibendum leo tempus, donec eget urna cursus tempus at urna ipsum pharetra&nbsp;&mdash; lectus mattis odio orci risus eros curabitur.</p><p>Sed ligula magna diam mauris diam ornare ut ultricies urna arcu. Porta massa sed eu eget tellus gravida sem mauris nec ligula quisque at ipsum nibh cursus auctor sit: mattis. Commodo pharetra, maecenas eros bibendum ornare cursus et commodo <i>eros urna sem sed, gravida eu, nulla.</i> Sem tellus vitae diam vivamus, quisque elementum cursus curabitur sapien porta.</p><p>Duis odio <b>risus, lorem mauris quam massa tempus, urna nulla leo justo</b> lorem, auctor, rutrum enim. Sodales sapien metus ut lectus adipiscing non eros porttitor amet massa <a href="#">ut sagittis leo sodales ultricies</a> gravida ipsum mattis, proin <b>auctor. Auctor sodales elementum metus&nbsp;&mdash; eros in</b> fusce lorem sem amet sem nibh ligula donec pellentesque commodo diam curabitur, at integer. Quam at tellus, odio sit, et nibh et rutrum ornare porta fusce, eu curabitur lectus diam sed tempus <i>maecenas ipsum</i>, porttitor auctor ipsum.</p><p>Bibendum vitae sed massa, sapien massa porttitor quam eget at: ornare ut odio tellus quam&nbsp;&mdash; quisque. Eros nibh sodales lectus curabitur vulputate ultricies cursus in quam risus mauris ipsum magna, eros congue ut, eros commodo, <b>urna pellentesque, vivamus.</b></p> 
         </div>
+
+        <button onclick="testJSON()">Test JSON</button>
     </body>
 </html>

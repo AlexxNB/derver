@@ -18,6 +18,7 @@ export function startHTTPServer(options){
         const server = http.createServer(function (req, res) {
             runMiddlewares([
                 mwURLParse(options),
+                mwJsonParse(options),
                 mwSend(options),
                 mwServer(options),
                 ...options.middlewares.list(),
@@ -113,7 +114,7 @@ export function createMiddlwaresList(){
 
 function runMiddlewares(mwArray,req,res){
 
-    mwArray.push((req,res)=>res.send(res.body||''));
+    mwArray.push((req,res)=>res.end(res.body||''));
 
     const next = ()=>{
         let mw;
@@ -136,6 +137,30 @@ function mwURLParse(options){
         req.search = parts.search;
         req.query = Array.from(parts.searchParams).reduce((obj,[name,value])=>(obj[name]=value,obj),{});
         next();
+    }
+}
+
+function mwJsonParse(options){
+    return function(req,res, next){
+        if(options.parseJson){
+            const isJson = req.headers['content-type'] && !req.headers['content-type'].indexOf('application/json') ;
+            
+            if(isJson){
+                let data = '';
+                req.on('data', chunk => {
+                    data += chunk;
+                })
+                req.on('end', () => {
+                    try{
+                        req.body = JSON.parse(data); 
+                    }catch(err){
+                        req.body = {};
+                        console.log(err.message);
+                    }
+                    next();
+                });
+            } else next();
+        } else next();
     }
 }
 
@@ -169,7 +194,12 @@ function mwFile(options){
 function mwSend(options){
     return function(req,res, next){
         res.send = function(message){
-            res.writeHead(200);
+            let mime = 'text/plain';
+            if(typeof message == 'object'){
+                message = JSON.stringify(message);
+                mime = 'application/json'
+            }
+            res.writeHead(200,{'Content-Type':mime});
             res.end(message);
         }
         next();

@@ -12,7 +12,8 @@ let default_options = {
     spa: false,
     watch: null,
     onwatch: null,
-    remote: false
+    remote: false,
+    parseJson: true
 }
 
 export function derver(options){
