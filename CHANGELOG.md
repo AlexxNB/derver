@@ -4,6 +4,16 @@
 
 ### Other
 
+- Merge branch 'main' of github.com:AlexxNB/derver into main [`082778e8`](https://github.com/AlexxNB/derver/commit/082778e8fc04c59de3eaca59dc6bd6ab3475f7bd)
+
+## 0.4.17 - 2021-06-28
+
+### Features
+
+- Add JSON handling in middlewares [`f967e600`](https://github.com/AlexxNB/derver/commit/f967e600240397155148ae9a0ca23754ebb7e81c)
+
+### Other
+
 - Merge branch 'main' of github.com:AlexxNB/derver into main [`554a0eb8`](https://github.com/AlexxNB/derver/commit/554a0eb89f1c7407316dfb76016cb943a53de207)
 
 ## 0.4.16 - 2021-06-12
