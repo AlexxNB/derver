@@ -20,7 +20,7 @@ export function derver(options){
     const opt = Object.assign(default_options,options,{middlewares:createMiddlwaresList()});
 
     (async()=>{
-        if(opt.watch === null) opt.watch = opt.dir;
+        if(opt.dir && opt.watch === null) opt.watch = opt.dir;
 
         try{
             await startHTTPServer(opt);

@@ -16,19 +16,31 @@ export function startHTTPServer(options){
         const clearSID = await saveSID(options);
 
         const server = http.createServer(function (req, res) {
-            runMiddlewares([
+
+            let middlewares = [
                 mwURLParse(options),
                 mwJsonParse(options),
                 mwSend(options),
-                mwServer(options),
-                ...options.middlewares.list(),
-                mwLivereload(options),
-                mwFile(options),
-                mwStatic(options),
-                mwInjectLivereload(options),
+                mwServer(options)
+            ];
+    
+            middlewares = middlewares.concat(options.middlewares.list());
+    
+            if(options.dir){
+                middlewares = middlewares.concat([
+                    mwLivereload(options),
+                    mwFile(options),
+                    mwStatic(options),
+                    mwInjectLivereload(options)
+                ])
+            }
+    
+            middlewares = middlewares.concat([
                 mwEncode(options),
-                mwCache(options),
-            ],req,res);
+                mwCache(options)
+            ])
+
+            runMiddlewares(middlewares,req,res);
         });
 
         server.on('listening',_ => {
