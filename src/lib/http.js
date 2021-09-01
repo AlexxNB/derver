@@ -45,11 +45,13 @@ export function startHTTPServer(options){
 
         server.on('listening',_ => {
             resolve(server);
-            table()
-                .line(production ? 'Derver server started' : 'Development server started','bold')
-                .line('on')
-                .line(`http://${options.host}:${options.port}`,'blue')
-                .print(5,'green')
+            if(options.banner){
+                table()
+                    .line(production ? 'Derver server started' : 'Development server started','bold')
+                    .line('on')
+                    .line(`http://${options.host}:${options.port}`,'blue')
+                    .print(5,'green')
+            }
         })
 
         server.on('error',e => {
@@ -232,7 +234,7 @@ function mwStatic(options){
     return async function(req,res,next){
     
         if(!req.exists){
-            console.log(c.gray('  [web] ')+req.url + ' - ' + c.red('404 Not Found'));
+            options.log && console.log(c.gray('  [web] ')+req.url + ' - ' + c.red('404 Not Found'));
             res.writeHead(404, {'Content-Type': 'text/plain'});
             return res.end('Not found');
         }
@@ -240,7 +242,7 @@ function mwStatic(options){
         if(mime[req.extname]) res.setHeader('Content-Type', mime[req.extname]);
 
         res.body = await fs.readFile(req.file);
-        console.log(c.gray('  [web] ')+req.url + ' - ' + c.green('200 OK'));
+        options.log && console.log(c.gray('  [web] ')+req.url + ' - ' + c.green('200 OK'));
         next();
     }
 }

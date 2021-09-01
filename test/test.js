@@ -4,6 +4,8 @@ const app = derver({
     dir: 'test/public',
     spa: true,
     remote: 'testname',
+    banner: false,
+    log: false,
   //  watch: false,
   //  cache: true,
   //  compress: true,

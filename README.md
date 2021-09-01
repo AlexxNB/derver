@@ -109,14 +109,15 @@ By default, server will be started on [http://localhost:7000]() and serve `publi
 
 You may set configuration object as a parameter of the `derver` function. Below you find all possible options:
 
-#### `dir` *string*
-Directory which contains files for serving. If nothing set in `watch` option, it will be watching for changes also.
+#### `dir` *string*|boolean
+Directory which contains files for serving. If nothing set in `watch` option, it will be watching for changes also. When it is `false` - no files would be serving, only middlewares will work. 
 
 
 *Default: public*
 
 
 *Example: dir: 'public'*
+*Example: dir: false*
 
 ---
 
@@ -211,7 +212,6 @@ Enables remote control listener. See [Remote control](#remote-control)
 *Example: remote: "my_dev_server"*
 
 ---
----
 
 #### `parseJson` *boolean*
 When incoming request sent with type `application/json` Derver will parse its body and put object in `request.body`.
@@ -221,6 +221,28 @@ When incoming request sent with type `application/json` Derver will parse its bo
 
 
 *Example: parseJson: true*
+
+---
+
+#### `banner` *boolean*
+Show or not the banner in console when server starts.
+
+
+*Default: true*
+
+
+*Example: banner: false*
+
+---
+
+#### `log` *boolean*
+Show or not file requests in console
+
+
+*Default: true*
+
+
+*Example: log: false*
 
 ---
 

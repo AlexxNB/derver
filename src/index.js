@@ -13,7 +13,9 @@ let default_options = {
     watch: null,
     onwatch: null,
     remote: false,
-    parseJson: true
+    parseJson: true,
+    banner: true,
+    log: true
 }
 
 export function derver(options){
