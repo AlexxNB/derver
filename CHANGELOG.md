@@ -1,6 +1,10 @@
 # Derver changelog
 
-## unreleased
+## 0.4.18 - 2021-09-01
+
+### Features
+
+- Ability to run only middlewares when dir option is false [`1c3c5bc1`](https://github.com/AlexxNB/derver/commit/1c3c5bc1a813369fca2338b9398f01e8e9a48bfb)
 
 ### Other
 
