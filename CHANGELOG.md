@@ -1,5 +1,17 @@
 # Derver changelog
 
+## unreleased
+
+### Other
+
+- Merge branch 'main' of github.com:AlexxNB/derver into main [`3779af12`](https://github.com/AlexxNB/derver/commit/3779af128dd0a67bf42ec5926834ba2afbc04159)
+
+## 0.4.19 - 2021-09-01
+
+### Features
+
+- Add options to prevent console trashing [`6883c207`](https://github.com/AlexxNB/derver/commit/6883c207d93c82638000a73f3696d23e5bb88a44)
+
 ## 0.4.18 - 2021-09-01
 
 ### Features
