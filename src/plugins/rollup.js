@@ -1,4 +1,4 @@
-import {derver} from './../../dist/derver.cjs.js';
+import {derver} from './../..';
 
 export default function(options){
     let first = true;

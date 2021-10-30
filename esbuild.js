@@ -44,10 +44,22 @@ build({
     entryPoints: ['./src/plugins/rollup.js'],
     platform: 'node',
     format: "cjs",
-    outfile: './rollup-plugin.js',
+    outfile: './rollup-plugin/rollup-plugin-cjs.js',
     minify: !DEV,
     bundle: true,
-    external: ['./dist/derver.cjs.js']
+    external: ['.']
+}).catch((e) => {
+    process.exit(1);
+})
+
+build({
+    entryPoints: ['./src/plugins/rollup.js'],
+    platform: 'node',
+    format: "esm",
+    outfile: './rollup-plugin/rollup-plugin-esm.js',
+    minify: !DEV,
+    bundle: true,
+    external: ['.']
 }).catch((e) => {
     process.exit(1);
 })

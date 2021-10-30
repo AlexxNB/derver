@@ -1,4 +1,5 @@
 node_modules
 bin
 dist
-*-plugin.js
+*-plugin-cjs.js
+*-plugin-esm.js
