@@ -8,6 +8,10 @@
     "derver": "./bin/derver"
   },
   "exports": {
+    ".":{
+      "require": "./dist/derver.cjs.js",
+      "import": "./dist/derver.esm.js"
+    },
     "./rollup-plugin": "./dist/plugins/rollup.js"
   },
   "scripts": {
