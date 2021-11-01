@@ -1,4 +1,0 @@
-{
-    "module":"rollup-plugin-esm.js",
-    "main":"rollup-plugin-cjs.js"
-}

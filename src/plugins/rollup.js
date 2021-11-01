@@ -1,13 +1,13 @@
-import {derver} from './../..';
+import {derver as server} from './../..';
 
-export default function(options){
+export function derver(options){
     let first = true;
     return {
         name: 'rollup-plugin-derver',
         generateBundle () {
             if (!first) return;
             first = !first;
-            derver(options);
+            server(options);
         }
     }
 }

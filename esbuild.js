@@ -1,65 +1,53 @@
 const { build } = require('esbuild');
+const pkg = require('./package.json');
 
 const DEV = process.argv.includes('--dev');
 
-// ES-module
-build({
-    entryPoints: ['./src/index.js'],
-    platform: 'node',
-    format: "esm",
-    outfile: './dist/derver.esm.js',
-    minify: !DEV,
-    bundle: true,
-}).catch((e) => {
-    process.exit(1);
-})
+(async ()=>{
+    try{
+        // ES-module
+        await build({
+            entryPoints: ['./src/index.js'],
+            platform: 'node',
+            format: "esm",
+            outfile: pkg.module,
+            minify: !DEV,
+            bundle: true,
+        });
 
-//Node-module
-build({
-    entryPoints: ['./src/index.js'],
-    platform: 'node',
-    format: "cjs",
-    outfile: './dist/derver.cjs.js',
-    minify: !DEV,
-    bundle: true,
-}).catch((e) => {
-    process.exit(1);
-})
+        //Node-module
+        await build({
+            entryPoints: ['./src/index.js'],
+            platform: 'node',
+            format: "cjs",
+            outfile: pkg.main,
+            minify: !DEV,
+            bundle: true,
+        });
 
-//Bin
-build({
-    entryPoints: ['./src/bin.js'],
-    platform: 'node',
-    format: "cjs",
-    outfile: './bin/derver',
-    minify: !DEV,
-    bundle: true,
-    external: ['./dist/derver.cjs.js']
-}).catch((e) => {
-    process.exit(1);
-})
+        //Bin
+        await build({
+            entryPoints: ['./src/bin.js'],
+            platform: 'node',
+            format: "cjs",
+            outfile: pkg.bin.derver,
+            minify: !DEV,
+            bundle: true,
+            external: [pkg.main]
+        });
 
-//Rollup plugin
-build({
-    entryPoints: ['./src/plugins/rollup.js'],
-    platform: 'node',
-    format: "cjs",
-    outfile: './rollup-plugin/rollup-plugin-cjs.js',
-    minify: !DEV,
-    bundle: true,
-    external: ['.']
-}).catch((e) => {
-    process.exit(1);
-})
-
-build({
-    entryPoints: ['./src/plugins/rollup.js'],
-    platform: 'node',
-    format: "esm",
-    outfile: './rollup-plugin/rollup-plugin-esm.js',
-    minify: !DEV,
-    bundle: true,
-    external: ['.']
-}).catch((e) => {
-    process.exit(1);
-})
+        //Rollup plugin
+        await build({
+            entryPoints: ['./src/plugins/rollup.js'],
+            platform: 'node',
+            format: "cjs",
+            outfile: pkg.exports['./rollup-plugin'],
+            minify: !DEV,
+            bundle: true,
+            external: ['.']
+        });
+    }catch(err){
+        console.log(err);
+        process.exit(1);
+    }
+})();

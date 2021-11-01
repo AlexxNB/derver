@@ -1,11 +1,14 @@
 {
   "name": "derver",
-  "version": "0.4.20",
+  "version": "0.5.0",
   "description": "Tiny Development Server for your web-applications with livereload and watchers",
-  "main": "dist/derver.cjs.js",
-  "module": "dist/derver.esm.js",
+  "main": "./dist/derver.cjs.js",
+  "module": "./dist/derver.esm.js",
   "bin": {
-    "derver": "bin/derver"
+    "derver": "./bin/derver"
+  },
+  "exports": {
+    "./rollup-plugin": "./dist/plugins/rollup.js"
   },
   "scripts": {
     "build": "node esbuild",
