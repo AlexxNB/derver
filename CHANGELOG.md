@@ -1,5 +1,11 @@
 # Derver changelog
 
+## unreleased
+
+### Other
+
+- Merge branch 'main' of github.com:AlexxNB/derver [`6cb79cb4`](https://github.com/AlexxNB/derver/commit/6cb79cb444efa9aba36fce0fcfa20ddebde62040)
+
 ## 0.4.20 - 2021-10-30
 
 ### Other
