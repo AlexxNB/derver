@@ -1,9 +1,10 @@
 # Derver changelog
 
-## unreleased
+## 0.4.20 - 2021-10-30
 
 ### Other
 
+- make rollup-plugin universal fo cjs and esm consumers [`48f130b6`](https://github.com/AlexxNB/derver/commit/48f130b6a6fbfcdbe7ad5b678afcb7905917f1a0)
 - Merge branch 'main' of github.com:AlexxNB/derver into main [`3779af12`](https://github.com/AlexxNB/derver/commit/3779af128dd0a67bf42ec5926834ba2afbc04159)
 
 ## 0.4.19 - 2021-09-01
