@@ -76,6 +76,11 @@ Add `Cache-control` header to the response with `max-age` equal `31536000` (~1 y
 *Example: --cache*
 *Example: --cache=3600*
 
+#### `--scroll`
+Restore scroll position on every reload. Number value is equal timeout before scroll restoration.
+*Example: --scroll*
+*Example: --scroll=100*
+
 #### `--spa`
 Enables SPA (Single-Page Application) mode. All requested pages will be responsed by index page in the application root, which is specified in `--index` parameter.
 *Example: --spa*
@@ -221,6 +226,20 @@ When incoming request sent with type `application/json` Derver will parse its bo
 
 
 *Example: parseJson: true*
+
+---
+
+#### `preserveScroll` *boolean*|*number*
+
+Restore scroll position on every reload. Number value is equal timeout before scroll restoration.
+
+*Default: false*
+
+
+*Example: preserveScroll: true*
+
+
+*Example: preserveScroll: 100*
 
 ---
 

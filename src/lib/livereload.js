@@ -125,8 +125,8 @@ export function getRemoteURL(){
 }
 
 // Must be a clean function. Will be injected in browser client in <script> tag.
-function lrClient(){
-    return (function(URL){
+function lrClient(options){
+    return (function(URL,scrollTimeout){
         let timer;
 
         function livereload(){
@@ -138,7 +138,7 @@ function lrClient(){
             }
         
             source.addEventListener('refresh', function(e) {
-                location.reload();
+                window.location.reload(true);
             }, false)
 
             source.addEventListener('console', function(e) {
@@ -241,7 +241,19 @@ function lrClient(){
                 document.body.append(message);
         }
 
+        function preserveScroll(){
+            const x = sessionStorage.getItem("_ds_x") || 0;
+            const y = sessionStorage.getItem("_ds_y") || 0;
+            setTimeout( ()=>window.scrollTo(x, y) ,scrollTimeout);
+
+            window.addEventListener("scroll", ()=>{
+              sessionStorage.setItem("_ds_x", window.scrollX);
+              sessionStorage.setItem("_ds_y", window.scrollY);
+            });
+        }
+
         livereload();
+        scrollTimeout && preserveScroll();
 
     }).toString(); 
 };
@@ -254,7 +266,7 @@ export function mwInjectLivereload(options){
       res.body = Buffer.from(
         res.body.toString('utf-8').replace(
             /(<\/body>)/,
-            `<script>(${lrClient()})('${LR_URL}')</script>\n$1`
+            `<script>(${lrClient(options)})('${LR_URL}',${options.preserveScroll === true ? 10 : Number(options.preserveScroll)})</script>\n$1`
         )
       );
     }

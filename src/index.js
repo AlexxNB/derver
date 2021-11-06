@@ -14,6 +14,7 @@ let default_options = {
     onwatch: null,
     remote: false,
     parseJson: true,
+    preserveScroll: false,
     banner: true,
     log: true
 }

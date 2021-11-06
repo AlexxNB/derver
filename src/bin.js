@@ -18,6 +18,7 @@ if(input.params['no-watch']) options.watch = false;
 if(input.params.spa) options.spa = true;
 if(input.params.compress) options.compress = true;
 if(input.params.cache) options.cache = input.params.cache === true ? true : Number(input.params.cache);
+if(input.params.scroll) options.preserveScroll = input.params.scroll === true ? 10 : Number(input.params.scroll);
 if(input.params.production) {
     options.compress = true;
     options.cache = true;

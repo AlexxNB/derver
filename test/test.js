@@ -6,6 +6,7 @@ const app = derver({
     remote: 'testname',
     banner: false,
     log: false,
+    preserveScroll: 10,
   //  watch: false,
   //  cache: true,
   //  compress: true,
