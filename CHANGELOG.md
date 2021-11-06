@@ -4,6 +4,16 @@
 
 ### Other
 
+- Merge branch 'main' of github.com:AlexxNB/derver [`e26d23c7`](https://github.com/AlexxNB/derver/commit/e26d23c79a01ae5cd2b08dace8a406bcd3be5633)
+
+## 0.5.1 - 2021-11-01
+
+### Bug Fixes
+
+- 🐛 Add exports for main and module also [`efaccc30`](https://github.com/AlexxNB/derver/commit/efaccc307a062ae5394edebfe46f458771636c76)
+
+### Other
+
 - Merge branch 'main' of github.com:AlexxNB/derver [`6cb79cb4`](https://github.com/AlexxNB/derver/commit/6cb79cb444efa9aba36fce0fcfa20ddebde62040)
 
 ## 0.4.20 - 2021-10-30
