@@ -4,6 +4,13 @@
 
 ### Other
 
+- Merge branch 'main' of github.com:AlexxNB/derver [`6f8d7d97`](https://github.com/AlexxNB/derver/commit/6f8d7d9750ee830e0e08bd2e84d6b0854beef340)
+
+## 0.5.3 - 2021-11-11
+
+### Other
+
+- add node path [`1dcd969c`](https://github.com/AlexxNB/derver/commit/1dcd969c3594fddb38ef9033ffc0591ea661b44d)
 - Merge branch 'main' of github.com:AlexxNB/derver [`04ddf9fd`](https://github.com/AlexxNB/derver/commit/04ddf9fd2570970f3ea7299ad194ed40c05541fe)
 
 ## 0.5.2 - 2021-11-06
