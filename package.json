@@ -9,6 +9,7 @@
   },
   "exports": {
     ".": {
+      "node": "./dist/derver.cjs.js",
       "require": "./dist/derver.cjs.js",
       "import": "./dist/derver.esm.js"
     },
