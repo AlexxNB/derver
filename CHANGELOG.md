@@ -4,6 +4,16 @@
 
 ### Other
 
+- Merge branch 'main' of github.com:AlexxNB/derver [`04ddf9fd`](https://github.com/AlexxNB/derver/commit/04ddf9fd2570970f3ea7299ad194ed40c05541fe)
+
+## 0.5.2 - 2021-11-06
+
+### Features
+
+- Preserve scroll position on reload [`483cc95a`](https://github.com/AlexxNB/derver/commit/483cc95ac5a9877976c104cd9ef79ba9eb6f3113)
+
+### Other
+
 - Merge branch 'main' of github.com:AlexxNB/derver [`e26d23c7`](https://github.com/AlexxNB/derver/commit/e26d23c79a01ae5cd2b08dace8a406bcd3be5633)
 
 ## 0.5.1 - 2021-11-01
